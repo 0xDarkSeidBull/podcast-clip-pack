@@ -1,6 +1,6 @@
 # Redbelly Insights Podcast Clip Pack
 
-Six captioned vertical clips (30 to 60 seconds) cut from the latest official Redbelly Insights episodes, each making one point about Redbelly technology, Project Acacia or Tokeniser. They are ready to post on X, YouTube Shorts and Instagram.
+Six captioned vertical clips (30 to 60 seconds) cut from the latest official Redbelly Insights episodes, each making one point about Redbelly technology, Project Acacia or Tokeniser. They are ready to post on X, YouTube Shorts, and Instagram.
 
 | Deliverable | Where |
 |---|---|
