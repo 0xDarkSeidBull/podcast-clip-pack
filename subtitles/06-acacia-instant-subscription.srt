@@ -1,0 +1,175 @@
+1
+00:00:00,180 --> 00:00:01,210
+So what Project Acacia
+
+2
+00:00:01,060 --> 00:00:02,290
+coming back to the
+
+3
+00:00:02,140 --> 00:00:03,170
+opportunity was,
+
+4
+00:00:03,280 --> 00:00:04,540
+we could show,
+
+5
+00:00:04,390 --> 00:00:06,040
+via Tokeniser,
+
+6
+00:00:05,890 --> 00:00:07,130
+essentially, hey,
+
+7
+00:00:07,140 --> 00:00:08,310
+a subscription goes from
+
+8
+00:00:08,160 --> 00:00:09,090
+a multi-day,
+
+9
+00:00:09,100 --> 00:00:10,150
+multi-step process
+
+10
+00:00:10,000 --> 00:00:11,210
+that's paper-based where
+
+11
+00:00:11,060 --> 00:00:13,090
+you essentially have to
+
+12
+00:00:12,940 --> 00:00:15,170
+send the funds cash and
+
+13
+00:00:15,020 --> 00:00:17,370
+hope and wait for the
+
+14
+00:00:17,220 --> 00:00:18,190
+fund to eventually
+
+15
+00:00:18,040 --> 00:00:19,170
+receive that cash,
+
+16
+00:00:19,400 --> 00:00:20,870
+confirm that payment and
+
+17
+00:00:20,720 --> 00:00:21,790
+then issue those units.
+
+18
+00:00:21,640 --> 00:00:23,210
+And those units are
+
+19
+00:00:23,060 --> 00:00:24,270
+issued normally on a
+
+20
+00:00:24,120 --> 00:00:24,630
+spreadsheet.
+
+21
+00:00:24,610 --> 00:00:25,920
+So with Acacia,
+
+22
+00:00:26,090 --> 00:00:27,060
+what that meant was the
+
+23
+00:00:26,910 --> 00:00:29,280
+investor could have AUDM
+
+24
+00:00:29,290 --> 00:00:29,980
+stablecoin,
+
+25
+00:00:30,850 --> 00:00:32,600
+agree to subscribe to
+
+26
+00:00:32,450 --> 00:00:33,800
+the fund and purchase
+
+27
+00:00:33,650 --> 00:00:34,640
+those units at a set
+
+28
+00:00:34,490 --> 00:00:35,900
+price. And as soon as
+
+29
+00:00:35,750 --> 00:00:36,720
+they agreed to that,
+
+30
+00:00:36,690 --> 00:00:37,840
+immediately those funds
+
+31
+00:00:37,690 --> 00:00:38,720
+and those units would
+
+32
+00:00:38,570 --> 00:00:39,900
+swap. So essentially
+
+33
+00:00:39,750 --> 00:00:41,180
+they, in real time,
+
+34
+00:00:41,030 --> 00:00:42,240
+as soon as they made
+
+35
+00:00:42,090 --> 00:00:42,840
+that payment,
+
+36
+00:00:42,690 --> 00:00:44,320
+got those units issued
+
+37
+00:00:44,170 --> 00:00:45,380
+to them and through the
+
+38
+00:00:45,230 --> 00:00:46,240
+platform, they could see
+
+39
+00:00:46,090 --> 00:00:47,260
+it, they could go down
+
+40
+00:00:47,110 --> 00:00:48,020
+the block explorer,
+
+41
+00:00:47,870 --> 00:00:48,960
+see that transaction.
+
+42
+00:00:48,810 --> 00:00:50,920
+Fantastic. Instantaneous
+
+43
+00:00:50,770 --> 00:00:52,400
+versus multi-day,
+
+44
+00:00:52,250 --> 00:00:53,020
+multi-week.
