@@ -68,6 +68,12 @@ def audio_frames(path):
     return len(pk), odd
 
 
+def tally(checks):
+    """The split, as in " (145 automated, 6 human reviews)", once a person's sign-off is among the checks."""
+    human = sum(1 for c in checks if c[1] == HUMAN_CHECK)
+    return f" ({len(checks) - human} automated, {human} human reviews)" if human else ""
+
+
 def timing_verdict(entries, x):
     """Verdict on a word the timing check found outside its cue (same word, within 0.3 s)."""
     return next((e["verdict"] for e in entries if e["word"] == x["word"] and abs(e["t"] - x["t"]) <= 0.3), None)
@@ -291,7 +297,7 @@ def write_verification_md(checks, rows, report, review):
            f"([`verification/report.json`](verification/report.json), tied to each MP4 and SRT by SHA-256). "
            "Every difference those checks find has to carry a manual verdict in "
            "[`verification/review.json`](verification/review.json) or the build fails.", "",
-           f"**{passed} of {len(checks)} checks pass.**", "",
+           f"**{passed} of {len(checks)} checks pass{tally(checks)}.**", "",
            "- [All checks](#all-checks)", "- [Subtitles against the audio](#subtitles-against-the-audio)",
            "- [Edits against the source episode](#edits-against-the-source-episode)",
            "- [What is on screen](#what-is-on-screen)"]
@@ -413,9 +419,10 @@ def write_verification_md(checks, rows, report, review):
 
 def write_index(rows, checks):
     e = html.escape
-    auto = [c for c in checks if c[1] != HUMAN_CHECK]      # the person's sign-off is not an automated check
-    passed = sum(1 for c in auto if c[2] == "PASS")
+    passed = sum(1 for c in checks if c[2] == "PASS")
     watched = sum(1 for c in checks if c[1] == HUMAN_CHECK and c[2] == "PASS")
+    human = sum(1 for c in checks if c[1] == HUMAN_CHECK)
+    split = f"<br>{len(checks) - human} automated + {human} human reviews" if human else ""
     lufs = [r["lufs"] for r in rows]
     play_icon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>'
     copy_icon = ('<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/>'
@@ -643,7 +650,7 @@ def write_index(rows, checks):
       <div class="stat"><b>{len(rows)}</b><span>vertical clips</span></div>
       <div class="stat"><b>1080&times;1920</b><span>9:16 &middot; 30 fps &middot; MP4</span></div>
       <div class="stat"><b>{sum(lufs) / len(lufs):.0f} LUFS</b><span>even audio across all clips</span></div>
-      <div class="stat"><b>{passed}/{len(auto)}</b><span>automated checks passed</span></div>
+      <div class="stat"><b>{passed}/{len(checks)}</b><span>checks passed{split}</span></div>
     </div>
   </div>
 </header>
