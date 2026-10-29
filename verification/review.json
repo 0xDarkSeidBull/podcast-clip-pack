@@ -1,0 +1,190 @@
+{
+ "note": "Every difference the automated checks list was checked against the official episode file. For each subtitle difference the same moment of the episode audio was transcribed again in short focused windows with two further models (Whisper large-v3 and small.en, beam search and greedy) and the waveform was inspected at 10 ms resolution; a word is shown in the subtitles when the focused passes agree it is spoken. Edit points were placed by reading the waveform at 10 ms resolution. The contact sheets were inspected frame by frame.",
+ "clips": {
+  "01-audd-sovereignty": {
+   "subtitle_diffs": [
+    {
+     "srt": "",
+     "asr": "Right.",
+     "verdict": "Not spoken twice. Focused large-v3 and small.en passes over 43:46.5-43:49.8 of the episode hear a single \"right?\"; the second \"Right.\" only appears in the full-clip pass, at the cut."
+    },
+    {
+     "srt": "and",
+     "asr": "an",
+     "verdict": "\"and\" spoken unstressed (\"an' especially\", \"an' Australian-operated\"); the sentence needs \"and\"."
+    },
+    {
+     "srt": "",
+     "asr": "Australian",
+     "verdict": "The speaker restarts the word (\"an Australian, Australian-built\"); the repeated word is left out, as for other false starts."
+    }
+   ],
+   "edit_points": [
+    {
+     "src": 2583.32,
+     "verdict": "No pause between \"that's exactly right\" and \"We're on Redbelly\"; the edit is at the quietest point between the two words and the clip starts on \"We're\"."
+    }
+   ],
+   "other_text": [],
+   "frames": "Effie Dimitropoulos is in frame in every sheet frame. The window stops above the episode's own lower-third, so her name and role appear once, in the clip's name card (\"CEO, AUDD Digital\"). No credits, handles, URLs or watermarks."
+  },
+  "02-tokenised-workflows": {
+   "subtitle_diffs": [
+    {
+     "srt": "it,",
+     "asr": "the",
+     "verdict": "\"it\" is spoken: the focused large-v3 pass over 5:43-5:48 and medium.en hear \"workflows around it, right?\" (small.en hears \"around the area\")."
+    },
+    {
+     "srt": "cases",
+     "asr": "case",
+     "verdict": "\"cases\" is spoken: focused small.en and medium.en hear \"use cases\" (focused large-v3 hears \"use case\"); the speaker refers to several use cases."
+    },
+    {
+     "srt": "",
+     "asr": "yeah",
+     "verdict": "Not spoken. Focused large-v3 and small.en passes over 6:01-6:06 hear no \"yeah\" in the pause between \"token?\" and \"What's the value\"."
+    }
+   ],
+   "edit_points": [
+    {
+     "src": 340.17,
+     "verdict": "No pause between \"I think\" and \"There is limited use\": the release of the final \"k\" in \"think\" runs into \"There\". The edit is at the onset of \"There\", after that release; large-v3, small.en and medium.en all hear the clip start on \"There is limited use\" (from 340.11 or 340.15 they hear an extra \"Okay\"/\"Yeah\")."
+    }
+   ],
+   "other_text": [],
+   "frames": "Vincent Gramoli is in frame in every sheet frame (the first 0.2 s holds his first frame while the episode shows the host). From 30 s the episode's wide shot shows the official Redbelly Insights studio sign. Name card \"Founder, Redbelly Network\". No credits, handles, URLs or watermarks."
+  },
+  "03-accountable-consensus": {
+   "subtitle_diffs": [
+    {
+     "srt": "You",
+     "asr": "",
+     "verdict": "\"You\" is spoken. With the clip's opening transcribed on its own (a second of silence before it), large-v3, small.en and medium.en all hear \"You know, the consensus is central to blockchain\"; the full-clip pass drops it."
+    },
+    {
+     "srt": "",
+     "asr": "yeah",
+     "verdict": "Not spoken. Focused large-v3 and small.en passes over 12:28-12:35 hear \"trying to double-spend, and that's how\" with no \"yeah\"."
+    },
+    {
+     "srt": "",
+     "asr": "you",
+     "verdict": "The speaker repeats \"you\" (\"how you, you couldn't solve consensus\", as small.en also hears it); the repeated word is left out."
+    },
+    {
+     "srt": "",
+     "asr": "right",
+     "verdict": "Not spoken. Focused large-v3 and small.en passes over 13:02-13:08 hear \"before cheating because there is a risk\" with no \"right\"."
+    }
+   ],
+   "edit_points": [
+    {
+     "src": 708.67,
+     "verdict": "\"as follows, you know, the consensus\" runs together with no pause; the edit is at the quietest point (-11 dB) after \"follows\". Large-v3, small.en and medium.en all hear the clip start on \"You know, the consensus is central to blockchain\"."
+    },
+    {
+     "src": 716.2,
+     "verdict": "The word ends before the edit: on its own, the last word of range 1 is heard whole by all three models (medium.en \"double spending\", small.en \"double spendings\", large-v3 \"double spinning\"). The subtitles use the speaker's term, \"double-spending\"."
+    }
+   ],
+   "other_text": [
+    {
+     "pattern": "(?i)(s?[ao]me?|sor)[_.—-]?",
+     "verdict": "The brand name \"some_\" printed on the speaker's polo shirt, part of the episode footage (OCR also reads parts of it, \"Sor\", \"som\", \"ome\"). Not a credit."
+    },
+    {
+     "text": "thy",
+     "verdict": "OCR noise on the speaker's hair at 00:27 (checked in the frame: there is no text there)."
+    }
+   ],
+   "frames": "Vincent Gramoli is in frame in every sheet frame; the last ranges use the episode's wide shot with the official Redbelly Insights studio sign. Name card \"Founder, Redbelly Network\". The only other text is the brand print on his shirt. No credits, handles, URLs or watermarks."
+  },
+  "04-ai-agent-accountability": {
+   "subtitle_diffs": [
+    {
+     "srt": "",
+     "asr": "So,",
+     "verdict": "False start: \"right? So, and I think it's very important\". The subtitles keep \"right?\" and leave out the abandoned \"So,\"."
+    },
+    {
+     "srt": "Redbelly",
+     "asr": "RedBilly",
+     "verdict": "Misrecognition of \"Redbelly\" by the transcription model."
+    },
+    {
+     "srt": "he",
+     "asr": "it",
+     "verdict": "\"he\" is spoken: the focused large-v3 pass over 17:36-17:41 and medium.en hear \"he acts on the behalf\" (small.en hears \"it\")."
+    },
+    {
+     "srt": "institutions",
+     "asr": "institution",
+     "verdict": "\"institutions\" is spoken: focused large-v3 and small.en passes over 17:44-17:49 both hear \"person or institutions that act\"."
+    }
+   ],
+   "edit_points": [
+    {
+     "src": 1088.95,
+     "verdict": "Clean: the edit sits in a 0.1 s pause (-59 dB) before \"And\". Transcribed on its own without the voice-activity filter, large-v3, small.en and medium.en all hear the range start \"And by having Redbelly Network\"; with the filter, large-v3 reads the first word as \"I\"."
+    }
+   ],
+   "other_text": [
+    {
+     "pattern": "(?i)associating.?jan",
+     "verdict": "OCR fusing the burned-in caption words \"associating an\"."
+    }
+   ],
+   "frames": "Vincent Gramoli is in frame in every sheet frame, across the episode's close-up and wide shots (the wide shots show the official Redbelly Insights studio sign). Name card \"Founder, Redbelly Network\". No credits, handles, URLs or watermarks."
+  },
+  "05-tokeniser-gateway": {
+   "subtitle_diffs": [
+    {
+     "srt": "And",
+     "asr": "",
+     "verdict": "\"And\" is spoken: focused small.en hears \"And that's very much why\"; focused large-v3 hears \"yeah and that's\"."
+    },
+    {
+     "srt": "",
+     "asr": "them",
+     "verdict": "Said once. Focused large-v3 and small.en passes over 7:43-7:48 hear a single \"enables them to\"."
+    },
+    {
+     "srt": "and",
+     "asr": "It",
+     "verdict": "\"and\" is spoken: focused large-v3 and small.en passes over 7:58-8:03 both hear \"Redbelly Network and makes it easy\"."
+    }
+   ],
+   "edit_points": [],
+   "other_text": [
+    {
+     "pattern": "(?i)familiar.?easy,?|that.?very|senses?|r?assets\\.?",
+     "verdict": "OCR fusing or misreading burned-in caption words (\"familiar, easy\", \"that very\", \"sense,\", \"their assets\")."
+    }
+   ],
+   "frames": "Matt Mills is in frame in every sheet frame. Name card \"Chief Customer Officer, Tokeniser\". No credits, handles, URLs or watermarks."
+  },
+  "06-acacia-instant-subscription": {
+   "subtitle_diffs": [
+    {
+     "srt": "",
+     "asr": "to",
+     "verdict": "False start: an unfinished word between \"show\" and \"via Tokeniser\" (heard as \"to\" or \"two\"); left out."
+    },
+    {
+     "srt": "",
+     "asr": "Fantastic.",
+     "verdict": "Said once. Focused large-v3 and small.en passes over 20:51-20:57 hear a single \"Fantastic.\"."
+    }
+   ],
+   "edit_points": [],
+   "other_text": [
+    {
+     "pattern": "(?i)i?see",
+     "verdict": "OCR fusing the burned-in caption words \"it, they could\" / \"see\"."
+    }
+   ],
+   "frames": "Matt Mills is in frame in every sheet frame. Name card \"Chief Customer Officer, Tokeniser\". No credits, handles, URLs or watermarks."
+  }
+ }
+}

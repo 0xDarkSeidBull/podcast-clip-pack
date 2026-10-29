@@ -22,7 +22,7 @@
     --radius: 6px; --r-sm: 4px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font: 16px/1.6 "Readex Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -77,15 +77,6 @@
   .btn.primary:hover { background: var(--red-2); border-color: var(--red-2); }
   .btn.ghost { background: transparent; }
   .btn.lg { height: 48px; padding: 0 22px; font-size: 15px; }
-  .to-top { position: fixed; right: 16px; bottom: 16px; z-index: 30; width: 48px; height: 48px; display: grid; place-items: center;
-            border-radius: var(--r-sm); border: 1px solid var(--line-2); background: rgba(20,37,48,.88); color: #fff; cursor: pointer;
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .2s, transform .2s, visibility .2s, background .2s, border-color .2s; }
-  .to-top.show { opacity: 1; visibility: visible; transform: none; }
-  .to-top:hover { background: var(--red); border-color: var(--red); }
-  .to-top:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
-  .to-top svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  @media (min-width: 720px) { .to-top { right: 24px; bottom: 24px; } }
   .btn svg, .copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
   /* section heads */
@@ -129,7 +120,8 @@
   .stamps ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
   .stamps li { font: 500 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 6px 8px; border-radius: var(--r-sm);
                background: rgba(255,255,255,.05); border: 1px solid var(--line); color: var(--grey-l); }
-  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 4px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 4px; }
+  .actions .btn { padding: 0 10px; gap: 6px; }
 
   /* specs */
   .table { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--card); }
@@ -143,6 +135,7 @@
   .ok { display: inline-flex; align-items: center; gap: 8px; color: var(--off); font-weight: 500; }
   .ok svg { width: 18px; height: 18px; padding: 3px; border-radius: var(--r-sm); background: rgba(236,235,236,.12);
             border: 1px solid rgba(236,235,236,.28); fill: none; stroke: var(--off); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .bad { color: var(--red); font-weight: 500; }
   .note { color: var(--muted); font-size: 14px; margin: 16px 0 0; }
   .note a { color: var(--text); }
 
@@ -179,7 +172,7 @@
       <div class="stat"><b>6</b><span>vertical clips</span></div>
       <div class="stat"><b>1080&times;1920</b><span>9:16 &middot; 30 fps &middot; MP4</span></div>
       <div class="stat"><b>-14 LUFS</b><span>even audio across all clips</span></div>
-      <div class="stat"><b>49/49</b><span>automated checks passed</span></div>
+      <div class="stat"><b>139/139</b><span>automated checks passed</span></div>
     </div>
   </div>
 </header>
@@ -195,19 +188,20 @@
           <button class="play" type="button" aria-label="Play clip 1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></button>
         </div>
         <div class="body">
-          <p class="ep">Clip 01 &middot; Episode 29 &middot; 48s</p>
+          <p class="ep">Clip 01 &middot; Episode 29 &middot; 49s</p>
           <h2>Why an Aussie dollar stablecoin runs on Redbelly</h2>
-          <p class="who"><span class="name">Effie Dimitropoulos</span><span class="role">CEO, AUDD Stablecoin</span></p>
+          <p class="who"><span class="name">Effie Dimitropoulos</span><span class="role">CEO, AUDD Digital</span></p>
           <p class="topic">Redbelly technology (Australian-built chain for a sovereign AUD stablecoin)</p>
           <div class="caption">
             <p>Every US dollar stablecoin is money that isn&#x27;t sitting onshore. AUDD&#x27;s Effie Dimitropoulos on why an Aussie dollar stablecoin chose Australian-built, Australian-operated Redbelly.</p>
             <button class="copy" type="button" data-copy="Every US dollar stablecoin is money that isn&#x27;t sitting onshore. AUDD&#x27;s Effie Dimitropoulos on why an Aussie dollar stablecoin chose Australian-built, Australian-operated Redbelly."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy caption</span></button>
           </div>
-          <div class="stamps"><span>Source timestamps</span><ul><li>43:03-43:11</li><li>43:21-43:29</li><li>43:40-43:50</li><li>44:06-44:29</li></ul></div>
+          <div class="stamps"><span>Source timestamps</span><ul><li>43:03.3-43:11.5</li><li>43:20.8-43:28.8</li><li>43:40.0-43:49.8</li><li>44:06.2-44:29.1</li></ul></div>
           <div class="actions">
             <a class="btn primary" href="clips/01-audd-sovereignty.mp4" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>MP4</a>
             <a class="btn" href="subtitles/01-audd-sovereignty.srt" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>SRT</a>
-            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_29_final_fde9f2a3d6/rb_ep_29_final_fde9f2a3d6.mp4" target="_blank" rel="noopener">Full episode</a>
+            <a class="btn ghost" href="verification/01-audd-sovereignty.jpg" target="_blank" rel="noopener">Frames</a>
+            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_29_final_fde9f2a3d6/rb_ep_29_final_fde9f2a3d6.mp4" target="_blank" rel="noopener" title="Full episode 29">Episode</a>
           </div>
         </div>
       </article>
@@ -226,11 +220,12 @@
             <p>A tokenised invoice on its own is just a PDF in token form. Vincent Gramoli on why the value is in the workflow: a promise of payment you can use as collateral, as tested in Project Acacia.</p>
             <button class="copy" type="button" data-copy="A tokenised invoice on its own is just a PDF in token form. Vincent Gramoli on why the value is in the workflow: a promise of payment you can use as collateral, as tested in Project Acacia."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy caption</span></button>
           </div>
-          <div class="stamps"><span>Source timestamps</span><ul><li>05:40-06:10</li><li>06:29-06:41</li></ul></div>
+          <div class="stamps"><span>Source timestamps</span><ul><li>05:40.2-06:10.2</li><li>06:28.6-06:41.5</li></ul></div>
           <div class="actions">
             <a class="btn primary" href="clips/02-tokenised-workflows.mp4" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>MP4</a>
             <a class="btn" href="subtitles/02-tokenised-workflows.srt" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>SRT</a>
-            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_28_final_745719acdb/rb_ep_28_final_745719acdb.mp4" target="_blank" rel="noopener">Full episode</a>
+            <a class="btn ghost" href="verification/02-tokenised-workflows.jpg" target="_blank" rel="noopener">Frames</a>
+            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_28_final_745719acdb/rb_ep_28_final_745719acdb.mp4" target="_blank" rel="noopener" title="Full episode 28">Episode</a>
           </div>
         </div>
       </article>
@@ -241,7 +236,7 @@
           <button class="play" type="button" aria-label="Play clip 3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></button>
         </div>
         <div class="body">
-          <p class="ep">Clip 03 &middot; Episode 28 &middot; 57s</p>
+          <p class="ep">Clip 03 &middot; Episode 28 &middot; 56s</p>
           <h2>Try to double-spend and you get caught</h2>
           <p class="who"><span class="name">Vincent Gramoli</span><span class="role">Founder, Redbelly Network</span></p>
           <p class="topic">Redbelly technology (accountable consensus)</p>
@@ -249,11 +244,12 @@
             <p>You can try to double-spend, but you&#x27;ll get caught, with undeniable proof of fraud. Vincent Gramoli explains accountable consensus.</p>
             <button class="copy" type="button" data-copy="You can try to double-spend, but you&#x27;ll get caught, with undeniable proof of fraud. Vincent Gramoli explains accountable consensus."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy caption</span></button>
           </div>
-          <div class="stamps"><span>Source timestamps</span><ul><li>11:49-11:56</li><li>12:16-12:41</li><li>12:42-12:58</li><li>13:02-13:10</li></ul></div>
+          <div class="stamps"><span>Source timestamps</span><ul><li>11:48.7-11:56.2</li><li>12:16.4-12:41.5</li><li>12:42.2-12:57.6</li><li>13:02.2-13:10.5</li></ul></div>
           <div class="actions">
             <a class="btn primary" href="clips/03-accountable-consensus.mp4" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>MP4</a>
             <a class="btn" href="subtitles/03-accountable-consensus.srt" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>SRT</a>
-            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_28_final_745719acdb/rb_ep_28_final_745719acdb.mp4" target="_blank" rel="noopener">Full episode</a>
+            <a class="btn ghost" href="verification/03-accountable-consensus.jpg" target="_blank" rel="noopener">Frames</a>
+            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_28_final_745719acdb/rb_ep_28_final_745719acdb.mp4" target="_blank" rel="noopener" title="Full episode 28">Episode</a>
           </div>
         </div>
       </article>
@@ -272,11 +268,12 @@
             <p>AI agents are welcome, but someone has to answer for them. Vincent Gramoli on linking every Redbelly account to a real person or institution.</p>
             <button class="copy" type="button" data-copy="AI agents are welcome, but someone has to answer for them. Vincent Gramoli on linking every Redbelly account to a real person or institution."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy caption</span></button>
           </div>
-          <div class="stamps"><span>Source timestamps</span><ul><li>17:05-17:27</li><li>17:35-17:56</li><li>18:09-18:24</li></ul></div>
+          <div class="stamps"><span>Source timestamps</span><ul><li>17:04.8-17:27.1</li><li>17:34.9-17:56.4</li><li>18:09.0-18:24.4</li></ul></div>
           <div class="actions">
             <a class="btn primary" href="clips/04-ai-agent-accountability.mp4" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>MP4</a>
             <a class="btn" href="subtitles/04-ai-agent-accountability.srt" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>SRT</a>
-            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_28_final_745719acdb/rb_ep_28_final_745719acdb.mp4" target="_blank" rel="noopener">Full episode</a>
+            <a class="btn ghost" href="verification/04-ai-agent-accountability.jpg" target="_blank" rel="noopener">Frames</a>
+            <a class="btn ghost" href="https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_28_final_745719acdb/rb_ep_28_final_745719acdb.mp4" target="_blank" rel="noopener" title="Full episode 28">Episode</a>
           </div>
         </div>
       </article>
@@ -289,17 +286,18 @@
         <div class="body">
           <p class="ep">Clip 05 &middot; Episode 26 &middot; 56s</p>
           <h2>Everyone wants tokenisation. Tokeniser is the how.</h2>
-          <p class="who"><span class="name">Matt Mills</span><span class="role">Tokeniser (formerly Liquidise)</span></p>
+          <p class="who"><span class="name">Matt Mills</span><span class="role">Chief Customer Officer, Tokeniser</span></p>
           <p class="topic">Tokeniser</p>
           <div class="caption">
             <p>Everyone wants tokenisation. The question has always been how. Matt Mills on Tokeniser: a familiar platform that brings issuers and investors onto Redbelly Network.</p>
             <button class="copy" type="button" data-copy="Everyone wants tokenisation. The question has always been how. Matt Mills on Tokeniser: a familiar platform that brings issuers and investors onto Redbelly Network."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy caption</span></button>
           </div>
-          <div class="stamps"><span>Source timestamps</span><ul><li>07:10-07:28</li><li>07:34-08:13</li></ul></div>
+          <div class="stamps"><span>Source timestamps</span><ul><li>07:10.4-07:27.9</li><li>07:34.3-08:12.9</li></ul></div>
           <div class="actions">
             <a class="btn primary" href="clips/05-tokeniser-gateway.mp4" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>MP4</a>
             <a class="btn" href="subtitles/05-tokeniser-gateway.srt" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>SRT</a>
-            <a class="btn ghost" href="https://firebasestorage.googleapis.com/v0/b/redbelly-website.firebasestorage.app/o/RBI_EP26.mp4?alt=media&amp;token=ce10a8dd-1721-4272-bd43-f3e6be081d94" target="_blank" rel="noopener">Full episode</a>
+            <a class="btn ghost" href="verification/05-tokeniser-gateway.jpg" target="_blank" rel="noopener">Frames</a>
+            <a class="btn ghost" href="https://firebasestorage.googleapis.com/v0/b/redbelly-website.firebasestorage.app/o/RBI_EP26.mp4?alt=media&amp;token=ce10a8dd-1721-4272-bd43-f3e6be081d94" target="_blank" rel="noopener" title="Full episode 26">Episode</a>
           </div>
         </div>
       </article>
@@ -312,17 +310,18 @@
         <div class="body">
           <p class="ep">Clip 06 &middot; Episode 26 &middot; 53s</p>
           <h2>Project Acacia: fund units issued the moment you pay</h2>
-          <p class="who"><span class="name">Matt Mills</span><span class="role">Tokeniser (formerly Liquidise)</span></p>
+          <p class="who"><span class="name">Matt Mills</span><span class="role">Chief Customer Officer, Tokeniser</span></p>
           <p class="topic">Project Acacia / Tokeniser</p>
           <div class="caption">
             <p>In Project Acacia, buying fund units went from a multi-day, paper-based process to an instant swap for AUDM stablecoin, visible on the Redbelly block explorer.</p>
             <button class="copy" type="button" data-copy="In Project Acacia, buying fund units went from a multi-day, paper-based process to an instant swap for AUDM stablecoin, visible on the Redbelly block explorer."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy caption</span></button>
           </div>
-          <div class="stamps"><span>Source timestamps</span><ul><li>19:52-20:16</li><li>20:29-20:57</li></ul></div>
+          <div class="stamps"><span>Source timestamps</span><ul><li>19:51.5-20:16.1</li><li>20:28.8-20:57.1</li></ul></div>
           <div class="actions">
             <a class="btn primary" href="clips/06-acacia-instant-subscription.mp4" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>MP4</a>
             <a class="btn" href="subtitles/06-acacia-instant-subscription.srt" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>SRT</a>
-            <a class="btn ghost" href="https://firebasestorage.googleapis.com/v0/b/redbelly-website.firebasestorage.app/o/RBI_EP26.mp4?alt=media&amp;token=ce10a8dd-1721-4272-bd43-f3e6be081d94" target="_blank" rel="noopener">Full episode</a>
+            <a class="btn ghost" href="verification/06-acacia-instant-subscription.jpg" target="_blank" rel="noopener">Frames</a>
+            <a class="btn ghost" href="https://firebasestorage.googleapis.com/v0/b/redbelly-website.firebasestorage.app/o/RBI_EP26.mp4?alt=media&amp;token=ce10a8dd-1721-4272-bd43-f3e6be081d94" target="_blank" rel="noopener" title="Full episode 26">Episode</a>
           </div>
         </div>
       </article>
@@ -336,27 +335,28 @@
         <thead><tr><th>#</th><th>Clip</th><th>Resolution</th><th>Frame rate</th><th>Length</th><th>Loudness</th><th>Checks</th></tr></thead>
         <tbody>
           <tr><td><a href="#01-audd-sovereignty">01</a></td><td>Why an Aussie dollar stablecoin runs on Redbelly</td><td>1080&times;1920</td>
-            <td>30 fps</td><td>48.4 s</td><td>-14.0 LUFS</td>
-            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pass</span></td></tr>
+            <td>30 fps</td><td>48.8 s</td><td>-14.0 LUFS</td>
+            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>23/23 pass</span></td></tr>
           <tr><td><a href="#02-tokenised-workflows">02</a></td><td>A tokenised invoice is just a PDF. The workflow is the value.</td><td>1080&times;1920</td>
             <td>30 fps</td><td>42.9 s</td><td>-14.0 LUFS</td>
-            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pass</span></td></tr>
+            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>23/23 pass</span></td></tr>
           <tr><td><a href="#03-accountable-consensus">03</a></td><td>Try to double-spend and you get caught</td><td>1080&times;1920</td>
-            <td>30 fps</td><td>56.8 s</td><td>-14.1 LUFS</td>
-            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pass</span></td></tr>
+            <td>30 fps</td><td>56.3 s</td><td>-14.1 LUFS</td>
+            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>23/23 pass</span></td></tr>
           <tr><td><a href="#04-ai-agent-accountability">04</a></td><td>Every AI agent needs a human who answers for it</td><td>1080&times;1920</td>
             <td>30 fps</td><td>59.3 s</td><td>-14.2 LUFS</td>
-            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pass</span></td></tr>
+            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>23/23 pass</span></td></tr>
           <tr><td><a href="#05-tokeniser-gateway">05</a></td><td>Everyone wants tokenisation. Tokeniser is the how.</td><td>1080&times;1920</td>
-            <td>30 fps</td><td>56.0 s</td><td>-14.4 LUFS</td>
-            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pass</span></td></tr>
+            <td>30 fps</td><td>56.2 s</td><td>-14.4 LUFS</td>
+            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>23/23 pass</span></td></tr>
           <tr><td><a href="#06-acacia-instant-subscription">06</a></td><td>Project Acacia: fund units issued the moment you pay</td><td>1080&times;1920</td>
             <td>30 fps</td><td>52.9 s</td><td>-14.4 LUFS</td>
-            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pass</span></td></tr>
+            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>23/23 pass</span></td></tr>
         </tbody>
       </table>
     </div></div>
-    <p class="note">Full results, including subtitle spelling and credit checks, are in the
+    <p class="note">Full results, including subtitles checked against an independent transcript of each clip's audio,
+      every edit point checked against the source episode, and on-screen text read back from the frames, are in the
       <a href="VERIFICATION.md">verification report</a>.</p>
   </section>
 </main>
@@ -368,8 +368,6 @@
       <a href="https://redbelly.network/ama" target="_blank" rel="noopener">redbelly.network/ama</a>. No music or third-party material added.</p>
   </div>
 </footer>
-
-<button class="to-top" type="button" aria-label="Back to top" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg></button>
 
 <script>
   (function () {
@@ -398,8 +396,7 @@
       b.addEventListener("click", function () {
         var v = b.parentNode.querySelector("video");
         var p = v.play();
-        // If the browser refuses to start playback, show the native controls so the clip is not stuck on its poster.
-        if (p && p.catch) p.catch(function () { v.controls = true; v.parentNode.classList.add("started"); });
+        if (p && p.catch) p.catch(function () {});
       });
     });
 
@@ -416,43 +413,11 @@
       b.addEventListener("click", function () {
         var t = b.getAttribute("data-copy");
         var done = function (msg) { label.textContent = msg; setTimeout(function () { label.textContent = "Copy caption"; }, 1800); };
-        // Older browsers and pages served without HTTPS have no clipboard API, so fall back to a hidden text area.
-        var legacy = function () {
-          var ta = document.createElement("textarea");
-          ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
-          document.body.appendChild(ta); ta.select();
-          var ok = false;
-          try { ok = document.execCommand("copy"); } catch (e) {}
-          document.body.removeChild(ta);
-          done(ok ? "Copied" : "Copy failed");
-        };
-        if (navigator.clipboard && window.isSecureContext) {
-          navigator.clipboard.writeText(t).then(function () { done("Copied"); }, legacy);
-        } else { legacy(); }
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(t).then(function () { done("Copied"); }, function () { done("Copy failed"); });
+        } else { done("Select the text to copy"); }
       });
     });
-
-    // Back to top button, shown once the page has scrolled past the hero.
-    var toTop = document.querySelector(".to-top");
-    if (toTop) {
-      var ticking = false;
-      var update = function () {
-        var show = window.scrollY > 600;
-        toTop.classList.toggle("show", show);
-        toTop.tabIndex = show ? 0 : -1;
-        ticking = false;
-      };
-      window.addEventListener("scroll", function () {
-        if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
-      }, { passive: true });
-      update();
-      toTop.addEventListener("click", function () {
-        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-        var top = document.getElementById("top");
-        if (top) { top.setAttribute("tabindex", "-1"); top.focus({ preventScroll: true }); }
-      });
-    }
   })();
 </script>
 </body>

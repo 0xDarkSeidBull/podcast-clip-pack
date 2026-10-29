@@ -1,11 +1,12 @@
 """Render the Redbelly Insights clip pack.
 
 Usage:
-  python3 tools/render.py SRC_DIR WORK_DIR [clip_id ...]
+  python3 tools/render.py SRC_DIR WORK_DIR [--subs-only] [clip_id ...]
 
 SRC_DIR holds the official episode files (ep25.mp4 ... ep29.mp4, see
 CLIPS.md). WORK_DIR holds per-clip word timings produced by
 tools/words.py. Output goes to clips/ and subtitles/ in the repo.
+--subs-only rewrites the SRT files from the same word timings without re-encoding.
 """
 import json
 import os
@@ -13,6 +14,7 @@ import re
 import subprocess
 import sys
 
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 import facetrack
@@ -129,7 +131,7 @@ def chunk(words, max_chars=24, max_words=5):
     return out
 
 
-def write_subs(words, ass_path, srt_path, sub_y):
+def write_subs(words, ass_path, srt_path, sub_y, dur):
     chunks = chunk(words)
     header = f"""[Script Info]
 ScriptType: v4.00+
@@ -150,9 +152,15 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     ev, srt = [], []
     for ci, c in enumerate(chunks):
         c_end = c[-1]["e"]
-        if ci + 1 < len(chunks) and chunks[ci + 1][0]["s"] - c_end < 0.6:
-            c_end = chunks[ci + 1][0]["s"]
-        srt.append(f"{ci + 1}\n{srt_time(c[0]['s'])} --> {srt_time(c[-1]['e'] + 0.15)}\n"
+        nxt = chunks[ci + 1][0]["s"] if ci + 1 < len(chunks) else None
+        if nxt is not None and nxt - c_end < 0.6:
+            c_end = nxt
+        # SRT cues never overlap: hold each line 150 ms after its last word, but end it
+        # no later than the next line starts (overlapping cues are rejected or stacked by some platforms)
+        s_end = min(c[-1]["e"] + 0.15, dur)
+        if nxt is not None:
+            s_end = min(s_end, nxt)
+        srt.append(f"{ci + 1}\n{srt_time(c[0]['s'])} --> {srt_time(s_end)}\n"
                    + " ".join(w["w"] for w in c) + "\n")
         for wi, w in enumerate(c):
             s = w["s"] if wi else c[0]["s"]
@@ -161,6 +169,38 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             ev.append(f"Dialogue: 0,{ass_time(s)},{ass_time(e)},Cap,,0,0,0,,{{\\pos({W // 2},{sub_y})}}{txt}")
     open(ass_path, "w").write(header + "\n".join(ev) + "\n")
     open(srt_path, "w").write("\n".join(srt))
+
+
+def speech(src, lo, hi, sr=16000):
+    """Mono audio of [lo, hi] in the episode, to settle which side of an edit a word is on."""
+    raw = subprocess.check_output(["ffmpeg", "-v", "fatal", "-ss", f"{lo:.3f}", "-t", f"{hi - lo:.3f}", "-i", src,
+                                   "-ac", "1", "-ar", str(sr), "-f", "s16le", "-"])
+    return np.frombuffer(raw, np.int16).astype(np.float32) / 32768
+
+
+def in_segment(w, a, b, pcm, t0, sr=16000):
+    """Whisper word times can be a few hundred ms off and edit points sit in pauses, so a word
+    that straddles an edit point belongs to the side that holds most of its sound energy."""
+    if w["e"] <= a or w["s"] >= b:
+        return False
+    if w["s"] >= a and w["e"] <= b:
+        return True
+    energy = lambda x, y: float(np.sum(pcm[int((x - t0) * sr):int((y - t0) * sr)] ** 2)) if y > x else 0.0
+    inside = energy(max(w["s"], a), min(w["e"], b))
+    return inside > energy(w["s"], w["e"]) - inside
+
+
+def clip_words(allw, segs, pcm, t0):
+    """Words of each range on the output timeline; "cut" starts a new caption line at each jump cut."""
+    words, offset = [], 0.0
+    for a, b, *_ in segs:
+        first = True
+        for w in allw:
+            if in_segment(w, a, b, pcm, t0):
+                words.append(dict(w, s=max(a, w["s"]) - a + offset, e=min(b, w["e"]) - a + offset, cut=first))
+                first = False
+        offset += b - a
+    return words
 
 
 # ---------------------------------------------------------------- video
@@ -203,7 +243,7 @@ def graph(clip, segs, lo, cw, ch, y0, plans, ass, bg_dur):
     return ";".join(parts), ";".join(aparts)
 
 
-def render(clip, src_dir, work):
+def render(clip, src_dir, work, subs_only=False):
     src = os.path.join(src_dir, f"ep{clip['episode']}.mp4")
     cid = clip["id"]
     segs = clip.get("segments") or [[clip["start"], clip["end"]]]
@@ -211,29 +251,25 @@ def render(clip, src_dir, work):
     dur = sum(sg[1] - sg[0] for sg in segs)
     fw, fh = probe(src)
 
+    # captions on the output timeline
+    allw = json.load(open(os.path.join(work, f"{cid}.words.json")))
+    words = clip_words(allw, segs, speech(src, lo - 3, hi + 3), lo - 3)
+    ass = os.path.join(work, f"{cid}.ass")
+    srt = os.path.join(ROOT, "subtitles", f"{cid}.srt")
+    write_subs(words, ass, srt, VID_Y + VID_H - 170, dur)
+    if subs_only:
+        print(cid, "->", srt)
+        return
+
     region = clip.get("region")
-    ch = fh
+    # optional crop_h keeps the source's own lower-third graphics out of the window
+    ch = clip.get("crop_h", fh)
     cw = int(round(ch * VID_W / VID_H / 2)) * 2
     y0 = clip.get("crop_y", 0)
     plans = clip.get("crop_x") or [facetrack.track(src, sg[2] if len(sg) > 2 else sg[0], sg[1], cw, fw, region,
                                                    clip.get("pick", "largest"), clip.get("max_cx"), clip.get("default_cx"))
                                    for sg in segs]
     json.dump(plans, open(os.path.join(work, f"{cid}.crop.json"), "w"))
-
-    # captions on the output timeline
-    words, offset = [], 0.0
-    allw = json.load(open(os.path.join(work, f"{cid}.words.json")))
-    for a, b, *_ in segs:
-        first = True
-        for w in allw:
-            if w["s"] >= a - 0.05 and (w["s"] + w["e"]) / 2 <= b:
-                # "cut" starts a new caption line at each jump cut
-                words.append(dict(w, s=max(0.0, w["s"] - a) + offset, e=min(b, w["e"]) - a + offset, cut=first))
-                first = False
-        offset += b - a
-    ass = os.path.join(work, f"{cid}.ass")
-    srt = os.path.join(ROOT, "subtitles", f"{cid}.srt")
-    write_subs(words, ass, srt, VID_Y + VID_H - 170)
 
     bg = os.path.join(work, f"{cid}.frame.png")
     frame_png(clip, bg)
@@ -262,11 +298,12 @@ def render(clip, src_dir, work):
 
 def main():
     src_dir, work = sys.argv[1], sys.argv[2]
-    only = set(sys.argv[3:])
+    subs_only = "--subs-only" in sys.argv[3:]
+    only = set(sys.argv[3:]) - {"--subs-only"}
     clips = json.load(open(os.path.join(ROOT, "clips.json")))
     for c in clips:
         if not only or c["id"] in only:
-            render(c, src_dir, work)
+            render(c, src_dir, work, subs_only)
 
 
 if __name__ == "__main__":

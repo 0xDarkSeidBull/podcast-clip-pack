@@ -57,16 +57,19 @@ def merge(words):
 
 
 def apply_fixes(words, fixes):
-    """Phrase-level corrections checked against the audio: {"from": "a b", "to": "c d"}."""
+    """Phrase-level corrections checked against the audio: {"from": "a b", "to": "c d"}.
+
+    An optional "s" gives the time the phrase actually starts in the audio, for the few
+    words whose Whisper timestamp lands on the wrong side of an edit point."""
     for fx in fixes:
         src, dst = fx["from"].split(), fx["to"].split()
         i = 0
         while i <= len(words) - len(src):
             if [w["w"] for w in words[i:i + len(src)]] == src:
-                s, e = words[i]["s"], words[i + len(src) - 1]["e"]
+                s, e = fx.get("s", words[i]["s"]), words[i + len(src) - 1]["e"]
                 step = (e - s) / len(dst)
                 new = [{"s": round(s + k * step, 3), "e": round(s + (k + 1) * step, 3), "w": t} for k, t in enumerate(dst)]
-                if len(dst) == len(src):
+                if len(dst) == len(src) and "s" not in fx:
                     new = [dict(words[i + k], w=t) for k, t in enumerate(dst)]
                 words[i:i + len(src)] = new
                 i += len(dst)

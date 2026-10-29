@@ -3,8 +3,14 @@
 Usage:
   python3 tools/build_docs.py
 
+Measures the specs of every MP4 and SRT itself, and reads the audio, edit and frame checks
+from verification/report.json (written by tools/verify_av.py, which needs the source
+episodes) plus the manual verdicts in verification/review.json. A report that does not
+match the current MP4 or SRT, or a difference nobody has reviewed, fails the build.
+
 Exits non-zero if any check fails, so it can gate a deploy.
 """
+import hashlib
 import html
 import json
 import os
@@ -13,10 +19,11 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+VER = os.path.join(ROOT, "verification")
 
 AMA = "https://redbelly.network/ama"
 EPISODES = {
-    29: {"title": "Redbelly Insights - Episode 29", "date": "9 July 2026", "guest": "Effie Dimitropoulos (AUDD)",
+    29: {"title": "Redbelly Insights - Episode 29", "date": "9 July 2026", "guest": "Effie Dimitropoulos (AUDD Digital)",
          "url": "https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_29_final_fde9f2a3d6/rb_ep_29_final_fde9f2a3d6.mp4"},
     28: {"title": "Redbelly Insights - Episode 28", "date": "11 June 2026", "guest": "Vincent Gramoli",
          "url": "https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_28_final_745719acdb/rb_ep_28_final_745719acdb.mp4"},
@@ -36,11 +43,6 @@ BANNED = [r"\bRed ?[Bb]elly\b(?<!Redbelly)", r"\bRed Belly\b", r"\bRedBelly\b", 
           r"\bTokeni[sz]er\b(?<!Tokeniser)", r"\bTokenizer\b", r"\btokeniz", r"\bAkasha\b", r"\bArcacia\b",
           r"\bRBMT\b", r"\bRevenue [Nn]etwork\b"]
 CREDIT = [r"made by", r"edited by", r"created by", r"@\w{3,}"]
-
-
-def ts(t):
-    m, s = divmod(int(round(t)), 60)
-    return f"{m:02d}:{s:02d}"
 
 
 def probe(path):
@@ -68,8 +70,55 @@ def srt_text(path):
                     if l.strip() and not l.strip().isdigit() and "-->" not in l)
 
 
+def srt_cues(path):
+    def sec(x):
+        h, m, s = x.strip().replace(",", ".").split(":")
+        return int(h) * 3600 + int(m) * 60 + float(s)
+    cues = []
+    for block in open(path).read().strip().split("\n\n"):
+        lines = block.strip().splitlines()
+        a, b = lines[1].split(" --> ")
+        cues.append((int(lines[0]), sec(a), sec(b)))
+    return cues
+
+
+def cue_problems(cues, dur):
+    bad = []
+    for i, (n, s, e) in enumerate(cues):
+        if n != i + 1:
+            bad.append(f"cue {n} out of sequence")
+        if e <= s:
+            bad.append(f"cue {n} has no duration")
+        if i and s < cues[i - 1][2]:
+            bad.append(f"cue {n} overlaps cue {cues[i - 1][0]}")
+        if e > dur + 0.05:
+            bad.append(f"cue {n} ends after the clip")
+    return bad
+
+
+def sha256(path):
+    return hashlib.sha256(open(path, "rb").read()).hexdigest()
+
+
+def clock(t):
+    m, s = divmod(t, 60)
+    return f"{int(m):02d}:{s:04.1f}"
+
+
+def verdict(entries, **want):
+    """Manual verdict recorded in verification/review.json for a difference, or None."""
+    for e in entries:
+        if all(e.get(k) == v or (k == "text" and "pattern" in e and re.fullmatch(e["pattern"], v))
+               for k, v in want.items()):
+            return e["verdict"]
+    return None
+
+
 def main():
     clips = json.load(open(os.path.join(ROOT, "clips.json")))
+    rpath, vpath = os.path.join(VER, "report.json"), os.path.join(VER, "review.json")
+    report = json.load(open(rpath)) if os.path.exists(rpath) else {"clips": {}}
+    review = json.load(open(vpath)) if os.path.exists(vpath) else {"clips": {}}
     rows, checks, ok = [], [], True
 
     def check(cid, name, passed, detail):
@@ -100,16 +149,69 @@ def main():
         check(cid, "No personal credit in file or subtitles", not cred, "none" if not cred else ", ".join(cred))
         check(cid, "Distinct point", c["hook"] not in points, c["hook"])
         points.add(c["hook"])
+        cues = srt_cues(srt)
+        bad = cue_problems(cues, p["dur"])
+        check(cid, "SRT cues in sequence, no overlaps", not bad, f"{len(cues)} cues" if not bad else "; ".join(bad[:3]))
+
+        # audio, edit and frame checks measured by tools/verify_av.py
+        r = report["clips"].get(cid)
+        rv = review["clips"].get(cid, {})
+        fresh = bool(r) and r["sha256"] == sha256(mp4) and r["srt_sha256"] == sha256(srt)
+        check(cid, "Audio/visual report is for this MP4 and SRT", fresh, "sha256 match" if fresh else "re-run tools/verify_av.py")
+        if r:
+            s = r["subs"]
+            check(cid, "Subtitles vs independent transcript of the clip audio", s["match"] >= 0.95,
+                  f"{s['match']:.1%} word match ({report['model']}), {len(s['diffs'])} differences")
+            open_diffs = [d for d in s["diffs"] if not verdict(rv.get("subtitle_diffs", []), srt=d["srt"], asr=d["asr"])]
+            check(cid, "Every subtitle difference reviewed against the audio", not open_diffs,
+                  f"{len(s['diffs'])} of {len(s['diffs'])} reviewed" if not open_diffs
+                  else "unreviewed: " + "; ".join(f"{d['srt']!r} vs {d['asr']!r}" for d in open_diffs[:3]))
+            check(cid, "Subtitle timing (word spoken while its cue is on screen)", s["timing_in_cue"] >= 0.95,
+                  f"{s['timing_in_cue']:.1%} of words within 0.3 s, worst {s['timing_worst_s']:.2f} s")
+            err = max(max(abs(x["head_ms"]), abs(x["tail_ms"])) for x in r["sync"])
+            corr = min(min(x["head_corr"], x["tail_corr"]) for x in r["sync"])
+            check(cid, "Clip audio is exactly the listed source ranges", err <= 40 and corr >= 0.8,
+                  f"{len(r['sync'])} ranges, start/end within {err:.0f} ms (correlation {corr:.2f})")
+            # an edit point is clean when it sits in a pause; one in connected speech needs a reviewed verdict
+            loud = [b for b in r["bounds"] if b["level_db"] > -20]
+            open_pts = [b for b in loud if not verdict(rv.get("edit_points", []), src=b["src"])]
+            check(cid, "Every edit point in a pause between words", not open_pts,
+                  f"{len(r['bounds']) - len(loud)} of {len(r['bounds'])} in a pause (-20 dB or quieter)"
+                  + (f", {len(loud)} in connected speech reviewed" if loud else "") if not open_pts
+                  else "; ".join(f"{clock(b['src'])} at {b['level_db']:.0f} dB" for b in open_pts))
+            edges = [b for b in r["bounds"] if b["heard"] != b["expect"]
+                     and not verdict(rv.get("edit_points", []), src=b["src"])]
+            same = sum(1 for b in r["bounds"] if b["heard"] == b["expect"])
+            check(cid, "First and last word of every range heard whole", not edges,
+                  f"{same} of {len(r['bounds'])} edit points match the subtitles"
+                  + (f", {len(r['bounds']) - same} reviewed" if same < len(r["bounds"]) else "") if not edges
+                  else "; ".join(f"{clock(b['src'])} heard {b['heard']!r}, subtitles {b['expect']!r}" for b in edges))
+            v = r["visual"]
+            check(cid, "Branded frame unchanged in every frame", v["static_max_diff"] <= 3.0,
+                  f"{v['frames']} frames, max difference {v['static_max_diff']:.1f}/255")
+            onscreen = v["name_ok"] and v["role_ok"] and v["hook_ok"] and v["episode_ok"]
+            check(cid, "On-screen name, role, hook and episode (OCR)", onscreen, v["footer_ocr"])
+            check(cid, "No credits, handles or URLs on screen (OCR every second)", not v["credits"],
+                  "none" if not v["credits"] else ", ".join(f"{x['text']} at {clock(x['t'])}" for x in v["credits"][:4]))
+            other = [x for x in v["other_text"] if not verdict(rv.get("other_text", []), text=x["text"])]
+            check(cid, "Any other on-screen text reviewed", not other,
+                  "none" if not v["other_text"] else f"{len(v['other_text'])} reviewed" if not other
+                  else "unreviewed: " + ", ".join(f"{x['text']} at {clock(x['t'])}" for x in other[:4]))
+            check(cid, "Speaker's face in frame", v["face_pct"] >= 0.9, f"{v['face_pct']:.0%} of frames")
+            check(cid, "No black or frozen video", not v["black"] and not v["freeze"],
+                  "none" if not v["black"] and not v["freeze"] else f"black {v['black']}, frozen {v['freeze']}")
+            check(cid, "Contact sheet reviewed", bool(rv.get("frames")),
+                  "reviewed (see Manual review)" if rv.get("frames") else "not reviewed")
 
         segs = c["segments"]
-        stamps = ", ".join(f"{ts(s[0])}-{ts(s[1])}" for s in segs)
+        stamps = ", ".join(f"{clock(s[0])}-{clock(s[1])}" for s in segs)
         ep = EPISODES[c["episode"]]
         rows.append({**c, "stamps": stamps, "ep": ep, "dur": p["dur"], "size": p["size"], "lufs": lufs, "w": p["w"], "h": p["h"], "fps": p["fps"],
-                     "topic": TOPIC[cid], "transcript": text})
+                     "topic": TOPIC[cid], "transcript": text, "report": r, "review": rv})
     check("pack", "6 clips", len(clips) == 6, str(len(clips)))
 
     write_clips_md(rows)
-    write_verification_md(checks, rows)
+    write_verification_md(checks, rows, report, review)
     write_index(rows, checks)
     print("\n".join(f"{c:32} {s:4} {n}: {d}" for c, n, s, d in checks))
     print("ALL CHECKS PASSED" if ok else "SOME CHECKS FAILED")
@@ -119,7 +221,7 @@ def main():
 def write_clips_md(rows):
     out = ["# Clip list", "",
            "Six vertical clips cut from the latest official Redbelly Insights episodes "
-           f"([redbelly.network/ama]({AMA})). Timestamps are `mm:ss` in the official episode file. "
+           f"([redbelly.network/ama]({AMA})). Timestamps are `mm:ss.s` in the official episode file. "
            "Where a clip has more than one range, the ranges are joined with a straight cut; "
            "only restatements or asides were removed, never words that change the point being made.", ""]
     out += ["| # | Clip | Source episode | Timestamps | Speaker | Length |",
@@ -138,18 +240,117 @@ def write_clips_md(rows):
                 f"- **Topic:** {r['topic']}",
                 f"- **Suggested post caption:** {r['caption']}", "",
                 f"> {r['transcript']}", ""]
+        if r["report"] and r["report"]["cuts"]:
+            out += ["**What each cut leaves out** (the removed audio transcribed on its own with Whisper large-v3):", ""]
+            for k, cut in enumerate(r["report"]["cuts"], 1):
+                out.append(f"- Cut {k} at {clock(cut['clip'])} in the clip, {clock(cut['from'])} to {clock(cut['to'])} in the episode "
+                           f"({cut['removed_s']:.1f} s): “{cut['removed'] or '(no speech)'}”")
+            out.append("")
     open(os.path.join(ROOT, "CLIPS.md"), "w").write("\n".join(out))
 
 
-def write_verification_md(checks, rows):
+def write_verification_md(checks, rows, report, review):
+    md = lambda s: str(s).replace("|", "\\|")
+    passed = sum(1 for c in checks if c[2] == "PASS")
+    model = report.get("model", "")
     out = ["# Verification", "",
-           "Generated by `python3 tools/build_docs.py` from the rendered files. Every value below is measured "
-           "from the MP4/SRT in this repository, not typed by hand.", "",
+           "Generated by `python3 tools/build_docs.py`. Specs, loudness and subtitle files are measured from the "
+           "MP4/SRT in this repository. The audio, edit and frame checks come from `tools/verify_av.py`, which "
+           "compares each clip with the official episode file and its own audio "
+           f"([`verification/report.json`](verification/report.json), tied to each MP4 and SRT by SHA-256). "
+           "Every difference those checks find has to carry a manual verdict in "
+           "[`verification/review.json`](verification/review.json) or the build fails.", "",
+           f"**{passed} of {len(checks)} checks pass.**", "",
+           "- [All checks](#all-checks)", "- [Subtitles against the audio](#subtitles-against-the-audio)",
+           "- [Edits against the source episode](#edits-against-the-source-episode)",
+           "- [What is on screen](#what-is-on-screen)", "- [Manual review](#manual-review)", "",
+           "## All checks", "",
            "| Clip | Check | Result | Measured |", "|------|-------|--------|----------|"]
-    out += [f"| {c} | {n} | {s} | {d} |" for c, n, s, d in checks]
+    out += [f"| {c} | {n} | {s} | {md(d)} |" for c, n, s, d in checks]
     lufs = [r["lufs"] for r in rows]
     out += ["", f"Loudness spread across the pack: {max(lufs) - min(lufs):.1f} LU "
             f"({min(lufs):.1f} to {max(lufs):.1f} LUFS integrated).", ""]
+
+    out += ["## Subtitles against the audio", "",
+            f"The final audio of each clip was transcribed again with Whisper `{model}`, a different and larger model than "
+            "the `medium.en` used for the subtitles, and compared word by word with the SRT (case, punctuation, "
+            "hyphens, fillers and British/American spelling ignored). Timing counts a word as on time when the "
+            "independent transcript has it spoken within 0.3 s of its cue being on screen. Every remaining difference "
+            "is listed with the verdict after checking that moment of the audio.", ""]
+    for r in rows:
+        rep = r["report"]
+        if not rep:
+            continue
+        s = rep["subs"]
+        out += [f"### {r['id']}", "",
+                f"{s['match']:.1%} word match ({s['srt_words']} subtitle words, {s['asr_words']} transcript words); "
+                f"{s['timing_in_cue']:.1%} of words on time.", ""]
+        if s["diffs"]:
+            out += ["| Clip time | Subtitles | Independent transcript | Verdict |", "|---|---|---|---|"]
+            for d in s["diffs"]:
+                v = verdict(r["review"].get("subtitle_diffs", []), srt=d["srt"], asr=d["asr"]) or "NOT REVIEWED"
+                out.append(f"| {clock(d['t'])} | {md(d['srt']) or '(nothing)'} | {md(d['asr']) or '(nothing)'} | {md(v)} |")
+            out.append("")
+
+    out += ["## Edits against the source episode", "",
+            "**Ranges.** The start and end of every range in the clip were found in the official episode file by "
+            "cross-correlating the audio. The error is the distance between where the audio actually comes from and "
+            "the timestamp listed in `clips.json` and `CLIPS.md`.", "",
+            "**Edit points.** For every point where a range starts or ends, the table gives the word on each side "
+            "(the subtitles on the side that is kept, a transcript of the removed audio on the side that is dropped) "
+            "and the level of the episode audio at that point relative to the speaker's loud passages. An edit point "
+            "passes when it sits in a pause (-20 dB or quieter). Where two words run together with no pause, the edit "
+            "is placed at the quietest point between them and carries a verdict. As a check that no word is clipped, "
+            "the kept side of every edit point is also transcribed on its own (2.5 s, with the clip's 40 ms fade and a "
+            "second of silence around it): the first word heard after a range starts and the last word heard before "
+            "it ends must be the subtitles' first and last word.", "",
+            "**Cuts.** The words left out at each cut are listed under each clip in [`CLIPS.md`](CLIPS.md).", ""]
+    for r in rows:
+        rep = r["report"]
+        if not rep:
+            continue
+        out += [f"### {r['id']}", "", "| Range | Listed | Start error | End error | Correlation |", "|---|---|---|---|---|"]
+        for x in rep["sync"]:
+            out.append(f"| {x['seg']} | {clock(x['from'])}-{clock(x['to'])} | {x['head_ms']:+.0f} ms | {x['tail_ms']:+.0f} ms | "
+                       f"{min(x['head_corr'], x['tail_corr']):.2f} |")
+        out += ["", "| Edit point | Episode | Clip | Word before | Word after | Heard on its own | Level | Verdict |",
+                "|---|---|---|---|---|---|---|---|"]
+        for b in rep["bounds"]:
+            clean = b["level_db"] <= -20 and b["heard"] == b["expect"]
+            v = "clean" if clean else verdict(r["review"].get("edit_points", []), src=b["src"]) or "NOT REVIEWED"
+            out.append(f"| range {b['seg']} {b['kind']} | {clock(b['src'])} | {clock(b['clip'])} | {md(b['prev'])} | "
+                       f"{md(b['next'])} | {md(b['heard'])} | {b['level_db']:.0f} dB | {md(v)} |")
+        out.append("")
+
+    out += ["## What is on screen", "",
+            "Every frame of each clip was decoded at 2 fps. The branded header and footer were compared with the "
+            "middle frame (any overlay, watermark or credit would change them), the on-screen name, role, hook and "
+            "episode were read back with OCR, the 4:5 video window was OCR'd once a second for credits, handles, "
+            "URLs or any other text, and a face detector checked that the speaker is in frame. The contact sheets "
+            "show one frame every 2 seconds.", ""]
+    for r in rows:
+        rep = r["report"]
+        if not rep:
+            continue
+        v = rep["visual"]
+        out += [f"### {r['id']}", "",
+                f"- **Name and role read from the video:** {v['footer_ocr']}",
+                f"- **Hook read from the video:** {v['header_ocr']}",
+                f"- **Speaker's face found in:** {v['face_pct']:.0%} of {v['frames']} frames",
+                f"- **Credits, handles or URLs:** {'none' if not v['credits'] else ', '.join(x['text'] for x in v['credits'])}"]
+        if v["other_text"]:
+            out.append("- **Other text in the video window:**")
+            for x in v["other_text"]:
+                vd = verdict(r["review"].get("other_text", []), text=x["text"]) or "NOT REVIEWED"
+                out.append(f"  - `{x['text']}` at {clock(x['t'])}: {vd}")
+        out += ["", f"![Contact sheet for {r['id']}](verification/{r['id']}.jpg)", ""]
+
+    out += ["## Manual review", ""]
+    out += [review.get("note", ""), ""] if review.get("note") else []
+    for r in rows:
+        if r["review"].get("frames"):
+            out.append(f"- **{r['id']}:** {r['review']['frames']}")
+    out.append("")
     open(os.path.join(ROOT, "VERIFICATION.md"), "w").write("\n".join(out))
 
 
@@ -186,14 +387,19 @@ def write_index(rows, checks):
           <div class="actions">
             <a class="btn primary" href="clips/{cid}.mp4" download>{dl_icon}MP4</a>
             <a class="btn" href="subtitles/{cid}.srt" download>{dl_icon}SRT</a>
-            <a class="btn ghost" href="{e(r['ep']['url'])}" target="_blank" rel="noopener">Full episode</a>
+            <a class="btn ghost" href="verification/{cid}.jpg" target="_blank" rel="noopener">Frames</a>
+            <a class="btn ghost" href="{e(r['ep']['url'])}" target="_blank" rel="noopener" title="Full episode {ep_no}">Episode</a>
           </div>
         </div>
       </article>""")
+        mine = [c for c in checks if c[0] == r["id"]]
+        fails = sum(1 for c in mine if c[2] != "PASS")
+        verdict_cell = (f'<span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+                        f'{len(mine)}/{len(mine)} pass</span>' if not fails else f'<span class="bad">{fails} failing</span>')
         spec_rows.append(f"""
           <tr><td><a href="#{cid}">{i:02d}</a></td><td>{e(r['hook'])}</td><td>{r['w']}&times;{r['h']}</td>
             <td>{r['fps']:.0f} fps</td><td>{r['dur']:.1f} s</td><td>{r['lufs']:.1f} LUFS</td>
-            <td><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pass</span></td></tr>""")
+            <td>{verdict_cell}</td></tr>""")
 
     page = f"""<!doctype html>
 <html lang="en">
@@ -317,7 +523,8 @@ def write_index(rows, checks):
   .stamps ul {{ list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }}
   .stamps li {{ font: 500 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 6px 8px; border-radius: var(--r-sm);
                background: rgba(255,255,255,.05); border: 1px solid var(--line); color: var(--grey-l); }}
-  .actions {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 4px; }}
+  .actions {{ display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 4px; }}
+  .actions .btn {{ padding: 0 10px; gap: 6px; }}
 
   /* specs */
   .table {{ border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--card); }}
@@ -331,6 +538,7 @@ def write_index(rows, checks):
   .ok {{ display: inline-flex; align-items: center; gap: 8px; color: var(--off); font-weight: 500; }}
   .ok svg {{ width: 18px; height: 18px; padding: 3px; border-radius: var(--r-sm); background: rgba(236,235,236,.12);
             border: 1px solid rgba(236,235,236,.28); fill: none; stroke: var(--off); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }}
+  .bad {{ color: var(--red); font-weight: 500; }}
   .note {{ color: var(--muted); font-size: 14px; margin: 16px 0 0; }}
   .note a {{ color: var(--text); }}
 
@@ -388,7 +596,8 @@ def write_index(rows, checks):
         </tbody>
       </table>
     </div></div>
-    <p class="note">Full results, including subtitle spelling and credit checks, are in the
+    <p class="note">Full results, including subtitles checked against an independent transcript of each clip's audio,
+      every edit point checked against the source episode, and on-screen text read back from the frames, are in the
       <a href="VERIFICATION.md">verification report</a>.</p>
   </section>
 </main>

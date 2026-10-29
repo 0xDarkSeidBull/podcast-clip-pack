@@ -1,0 +1,1112 @@
+{
+ "model": "large-v3",
+ "tool": "tools/verify_av.py",
+ "clips": {
+  "01-audd-sovereignty": {
+   "sha256": "ff0d042fa75fb4db2444a2d1ca7b24e6fd9bbc2db325de04365afe90d46f949d",
+   "srt_sha256": "3dafb9f84aa087936a2296e2dc0081073eaad17cbabd784fdd6e21c0825772a2",
+   "subs": {
+    "match": 0.9767,
+    "srt_words": 128,
+    "asr_words": 130,
+    "diffs": [
+     {
+      "t": 25.7,
+      "srt": "",
+      "asr": "Right.",
+      "context": "with US dollars, right? However, it all then"
+     },
+     {
+      "t": 32.21,
+      "srt": "and",
+      "asr": "an",
+      "context": "US dollar, that is, and especially US dollar stablecoin,"
+     },
+     {
+      "t": 44.26,
+      "srt": "",
+      "asr": "Australian",
+      "context": "Redbelly that is an Australian-built and Australian-operated blockchain"
+     },
+     {
+      "t": 43.85,
+      "srt": "and",
+      "asr": "an",
+      "context": "that is an Australian-built and Australian-operated blockchain is pretty"
+     }
+    ],
+    "timing_in_cue": 0.9921,
+    "timing_worst_s": 0.66,
+    "asr_text": "We're on red belly for that exact reason. Well, two reasons. You know, I touched on one of them, which is the sovereignty, right? When you or I don't naturally hold and spend US dollars in our day -to -day lives and in our wallets, we generally tend to operate in our Australian dollars. Then why are we pushed in the digital asset space of dealing with US dollars, right? Right. However, it all then boils down to every time you're using a U .S. dollar that is an especially U .S. dollar stable coin, it's money that's not sitting on shore. It's money that's not backing your asset on shore. And so supporting the Australian ecosystem by using a blockchain like RedBelly that is an Australian, Australian built, an Australian operated blockchain is pretty important."
+   },
+   "cue_issues": [],
+   "sync": [
+    {
+     "seg": 1,
+     "from": 2583.32,
+     "to": 2591.47,
+     "head_ms": 0.1,
+     "head_corr": 1.0,
+     "tail_ms": 0.0,
+     "tail_corr": 0.999
+    },
+    {
+     "seg": 2,
+     "from": 2600.82,
+     "to": 2608.81,
+     "head_ms": 0.0,
+     "head_corr": 0.998,
+     "tail_ms": 0.0,
+     "tail_corr": 0.999
+    },
+    {
+     "seg": 3,
+     "from": 2620.03,
+     "to": 2629.76,
+     "head_ms": 0.0,
+     "head_corr": 0.994,
+     "tail_ms": -0.1,
+     "tail_corr": 0.995
+    },
+    {
+     "seg": 4,
+     "from": 2646.16,
+     "to": 2669.12,
+     "head_ms": 0.0,
+     "head_corr": 1.0,
+     "tail_ms": 0.0,
+     "tail_corr": 0.994
+    }
+   ],
+   "bounds": [
+    {
+     "seg": 1,
+     "kind": "in",
+     "src": 2583.32,
+     "clip": 0.0,
+     "prev": "right.",
+     "next": "We're",
+     "heard": "we're",
+     "expect": "we're",
+     "level_db": -14.0
+    },
+    {
+     "seg": 1,
+     "kind": "out",
+     "src": 2591.47,
+     "clip": 8.15,
+     "prev": "right?",
+     "next": "I",
+     "heard": "right",
+     "expect": "right",
+     "level_db": -33.6
+    },
+    {
+     "seg": 2,
+     "kind": "in",
+     "src": 2600.82,
+     "clip": 8.15,
+     "prev": "sovereignty.",
+     "next": "When",
+     "heard": "when",
+     "expect": "when",
+     "level_db": -43.4
+    },
+    {
+     "seg": 2,
+     "kind": "out",
+     "src": 2608.81,
+     "clip": 16.14,
+     "prev": "wallets,",
+     "next": "And",
+     "heard": "wallets",
+     "expect": "wallets",
+     "level_db": -36.1
+    },
+    {
+     "seg": 3,
+     "kind": "in",
+     "src": 2620.03,
+     "clip": 16.14,
+     "prev": "etc.",
+     "next": "we",
+     "heard": "we",
+     "expect": "we",
+     "level_db": -28.3
+    },
+    {
+     "seg": 3,
+     "kind": "out",
+     "src": 2629.76,
+     "clip": 25.87,
+     "prev": "right?",
+     "next": "And",
+     "heard": "right",
+     "expect": "right",
+     "level_db": -32.8
+    },
+    {
+     "seg": 4,
+     "kind": "in",
+     "src": 2646.16,
+     "clip": 25.87,
+     "prev": "that.",
+     "next": "However,",
+     "heard": "however",
+     "expect": "however",
+     "level_db": -69.2
+    },
+    {
+     "seg": 4,
+     "kind": "out",
+     "src": 2669.12,
+     "clip": 48.83,
+     "prev": "important.",
+     "next": "I",
+     "heard": "important",
+     "expect": "important",
+     "level_db": -67.2
+    }
+   ],
+   "cuts": [
+    {
+     "clip": 8.15,
+     "from": 2591.47,
+     "to": 2600.82,
+     "removed_s": 9.35,
+     "removed": "I have, and many non -US dollar stablecoin issuers feel the same way, and that is this whole idea of sovereignty."
+    },
+    {
+     "clip": 16.14,
+     "from": 2608.81,
+     "to": 2620.03,
+     "removed_s": 11.22,
+     "removed": "And even in our transactions, when we're buying a car and a house and paying for our tradesmen and tradespeople and doing our day -to -day activities, our investments, etc."
+    },
+    {
+     "clip": 25.87,
+     "from": 2629.76,
+     "to": 2646.16,
+     "removed_s": 16.4,
+     "removed": "And why? Because they've been there longer and there is that dominance and there is that comfort. And, you know, no doubt the digital asset space is priced in US dollars. So, you know, that plays quite an important role in that."
+    }
+   ],
+   "visual": {
+    "frames": 98,
+    "static_max_diff": 0.6,
+    "footer_ocr": "Effie Dimitropoulos CEO, AUDD Digital",
+    "header_ocr": "Why an Aussie dollar stablecoin runs on Redbelly",
+    "tag_ocr": "INSIGHTS - EPISODE 29",
+    "name_ok": true,
+    "role_ok": true,
+    "hook_ok": true,
+    "episode_ok": true,
+    "credits": [],
+    "other_text": [],
+    "face_pct": 1.0,
+    "black": [],
+    "freeze": []
+   }
+  },
+  "02-tokenised-workflows": {
+   "sha256": "deaf62dde143d5e2af71b064456f793b0996aa1253bb152ac080b687812e69bb",
+   "srt_sha256": "c52b3960512a87f3d55c1b88525d6b929a551b196bfd0abee532547afb014684",
+   "subs": {
+    "match": 0.9822,
+    "srt_words": 140,
+    "asr_words": 141,
+    "diffs": [
+     {
+      "t": 5.7,
+      "srt": "it,",
+      "asr": "the",
+      "context": "the tokenised workflows around it, right? So if you"
+     },
+     {
+      "t": 9.46,
+      "srt": "cases",
+      "asr": "case",
+      "context": "some of the use cases we've done with Project"
+     },
+     {
+      "t": 22.98,
+      "srt": "",
+      "asr": "yeah",
+      "context": "digitalised into a token? What's the value out"
+     }
+    ],
+    "timing_in_cue": 0.9855,
+    "timing_worst_s": 0.39,
+    "asr_text": "there is limited use in the tokenized assets right if you don't have the tokenized workflows around the right so if you think about uh like i remember some of the use case we've done with project acacia and arturo which was about you know tokenizing invoices for example if you think about an invoice that is tokenized okay that's what a pdf document that has been digitalized into a token yeah what's the value out of it the value comes from the promise of a payment The invoice is a promise of a payment, right? And that's really what is interesting here because now you can use this invoice as a promise of payment as a collateral maybe, you know, and you can borrow money. And this whole workflow is much more valuable than the digital representation of the invoice itself."
+   },
+   "cue_issues": [],
+   "sync": [
+    {
+     "seg": 1,
+     "from": 340.17,
+     "to": 370.2,
+     "head_ms": 0.0,
+     "head_corr": 0.999,
+     "tail_ms": 0.0,
+     "tail_corr": 0.994
+    },
+    {
+     "seg": 2,
+     "from": 388.65,
+     "to": 401.48,
+     "head_ms": 0.0,
+     "head_corr": 1.0,
+     "tail_ms": 0.1,
+     "tail_corr": 0.996
+    }
+   ],
+   "bounds": [
+    {
+     "seg": 1,
+     "kind": "in",
+     "src": 340.17,
+     "clip": 0.0,
+     "prev": "think...",
+     "next": "There",
+     "heard": "there",
+     "expect": "there",
+     "level_db": -13.1
+    },
+    {
+     "seg": 1,
+     "kind": "out",
+     "src": 370.2,
+     "clip": 30.03,
+     "prev": "right?",
+     "next": "So",
+     "heard": "right",
+     "expect": "right",
+     "level_db": -25.4
+    },
+    {
+     "seg": 2,
+     "kind": "in",
+     "src": 388.65,
+     "clip": 30.03,
+     "prev": "right?",
+     "next": "And",
+     "heard": "and",
+     "expect": "and",
+     "level_db": -28.2
+    },
+    {
+     "seg": 2,
+     "kind": "out",
+     "src": 401.48,
+     "clip": 42.86,
+     "prev": "itself.",
+     "next": "Because",
+     "heard": "itself",
+     "expect": "itself",
+     "level_db": -38.7
+    }
+   ],
+   "cuts": [
+    {
+     "clip": 30.03,
+     "from": 370.2,
+     "to": 388.65,
+     "removed_s": 18.45,
+     "removed": "So if you start thinking into workflows, like, oh, now I see this tokenized asset, which is an invoice, as a process, as a promise of payment, then now I can understand that there will be a process attached to it that will deliver some value to my use cases, right?"
+    }
+   ],
+   "visual": {
+    "frames": 86,
+    "static_max_diff": 0.61,
+    "footer_ocr": "Vincent Gramoli Founder, Redbelly Network",
+    "header_ocr": "A tokenised invoice Is just a PDF. The workflow is the value.",
+    "tag_ocr": "INSIGHTS - EPISODE 28",
+    "name_ok": true,
+    "role_ok": true,
+    "hook_ok": true,
+    "episode_ok": true,
+    "credits": [],
+    "other_text": [],
+    "face_pct": 1.0,
+    "black": [],
+    "freeze": []
+   }
+  },
+  "03-accountable-consensus": {
+   "sha256": "83c48008cf9b92f8a1a6adad791620d76105b153c711becb01cd3d79c44fade7",
+   "srt_sha256": "93044d51ac3e743c0e5bfc1574d7a9b8d70c1666b34248993f38a6c93dc6140b",
+   "subs": {
+    "match": 0.989,
+    "srt_words": 181,
+    "asr_words": 183,
+    "diffs": [
+     {
+      "t": 0.0,
+      "srt": "You",
+      "asr": "",
+      "context": "You know, the consensus is"
+     },
+     {
+      "t": 22.34,
+      "srt": "",
+      "asr": "yeah",
+      "context": "are trying to double-spend, and that's how you"
+     },
+     {
+      "t": 23.22,
+      "srt": "",
+      "asr": "you",
+      "context": "double-spend, and that's how you couldn't solve consensus,"
+     },
+     {
+      "t": 50.94,
+      "srt": "",
+      "asr": "right",
+      "context": "think twice before cheating because there is a"
+     }
+    ],
+    "timing_in_cue": 0.9944,
+    "timing_worst_s": 0.43,
+    "asr_text": "know the consensus is central to blockchain right so making sure that you know there's a unique block at the given index prevents you from having double spending what we did back in 2019 was to define um an accountable consensus version which means that okay if you cannot solve consensus which means that you probably have hackers among the participants that are trying to double spend yeah and that's how you you couldn't solve consensus then what you can do if you truly solve the accountable consensus problem is that you can identify who they are and so suddenly you make everyone accountable in the sense that okay you can cheat if you want you can try to double spend but you're going to get caught and there is no way around there's going to be an undeniable proof of fraud that will be generated and everyone will see that you're responsible if you know that you're going to think twice before cheating right because there is a risk that you cannot even double spend but for sure you're going to get caught"
+   },
+   "cue_issues": [],
+   "sync": [
+    {
+     "seg": 1,
+     "from": 708.67,
+     "to": 716.2,
+     "head_ms": 0.0,
+     "head_corr": 0.994,
+     "tail_ms": 0.0,
+     "tail_corr": 0.999
+    },
+    {
+     "seg": 2,
+     "from": 736.35,
+     "to": 761.48,
+     "head_ms": 0.0,
+     "head_corr": 0.998,
+     "tail_ms": 0.0,
+     "tail_corr": 1.0
+    },
+    {
+     "seg": 3,
+     "from": 762.22,
+     "to": 777.6,
+     "head_ms": 0.0,
+     "head_corr": 0.986,
+     "tail_ms": 0.0,
+     "tail_corr": 1.0
+    },
+    {
+     "seg": 4,
+     "from": 782.22,
+     "to": 790.46,
+     "head_ms": 0.0,
+     "head_corr": 0.991,
+     "tail_ms": 0.0,
+     "tail_corr": 0.974
+    }
+   ],
+   "bounds": [
+    {
+     "seg": 1,
+     "kind": "in",
+     "src": 708.67,
+     "clip": 0.0,
+     "prev": "follows.",
+     "next": "You",
+     "heard": "you",
+     "expect": "you",
+     "level_db": -11.2
+    },
+    {
+     "seg": 1,
+     "kind": "out",
+     "src": 716.2,
+     "clip": 7.53,
+     "prev": "double-spending.",
+     "next": "So",
+     "heard": "spinning",
+     "expect": "spending",
+     "level_db": -26.8
+    },
+    {
+     "seg": 2,
+     "kind": "in",
+     "src": 736.35,
+     "clip": 7.53,
+     "prev": "anyway.",
+     "next": "What",
+     "heard": "what",
+     "expect": "what",
+     "level_db": -53.7
+    },
+    {
+     "seg": 2,
+     "kind": "out",
+     "src": 761.48,
+     "clip": 32.66,
+     "prev": "are.",
+     "next": "Interesting.",
+     "heard": "are",
+     "expect": "are",
+     "level_db": -60.1
+    },
+    {
+     "seg": 3,
+     "kind": "in",
+     "src": 762.22,
+     "clip": 32.66,
+     "prev": "Interesting.",
+     "next": "And",
+     "heard": "and",
+     "expect": "and",
+     "level_db": -36.2
+    },
+    {
+     "seg": 3,
+     "kind": "out",
+     "src": 777.6,
+     "clip": 48.04,
+     "prev": "responsible.",
+     "next": "And",
+     "heard": "responsible",
+     "expect": "responsible",
+     "level_db": -34.1
+    },
+    {
+     "seg": 4,
+     "kind": "in",
+     "src": 782.22,
+     "clip": 48.04,
+     "prev": "mean,",
+     "next": "If",
+     "heard": "if",
+     "expect": "if",
+     "level_db": -22.3
+    },
+    {
+     "seg": 4,
+     "kind": "out",
+     "src": 790.46,
+     "clip": 56.28,
+     "prev": "caught.",
+     "next": "Yeah,",
+     "heard": "caught",
+     "expect": "caught",
+     "level_db": -48.4
+    }
+   ],
+   "cuts": [
+    {
+     "clip": 7.53,
+     "from": 716.2,
+     "to": 736.35,
+     "removed_s": 20.15,
+     "removed": "So it's a very strong property. So agreeing on the uniqueness of a block is super interesting. Now, of course, there are limitations, there are impossibility results that prevent you from solving this problem in kind of adversarial context where messages can be delayed or participants can fail. But anyway."
+    },
+    {
+     "clip": 32.66,
+     "from": 761.48,
+     "to": 762.22,
+     "removed_s": 0.74,
+     "removed": "Interesting."
+    },
+    {
+     "clip": 48.04,
+     "from": 777.6,
+     "to": 782.22,
+     "removed_s": 4.62,
+     "removed": "And so if you, if you're, you know, if you think about it twice, it would be, I mean,"
+    }
+   ],
+   "visual": {
+    "frames": 112,
+    "static_max_diff": 0.54,
+    "footer_ocr": "Vincent Gramoli Founder, Redbelly Network",
+    "header_ocr": "Try to double-spend and you get caught",
+    "tag_ocr": "INSIGHTS - EPISODE 28",
+    "name_ok": true,
+    "role_ok": true,
+    "hook_ok": true,
+    "episode_ok": true,
+    "credits": [],
+    "other_text": [
+     {
+      "t": 0.0,
+      "text": "some"
+     },
+     {
+      "t": 1.0,
+      "text": "Some"
+     },
+     {
+      "t": 3.0,
+      "text": "some"
+     },
+     {
+      "t": 4.0,
+      "text": "some_"
+     },
+     {
+      "t": 6.0,
+      "text": "some_"
+     },
+     {
+      "t": 7.0,
+      "text": "some-"
+     },
+     {
+      "t": 8.0,
+      "text": "some"
+     },
+     {
+      "t": 9.0,
+      "text": "some_"
+     },
+     {
+      "t": 12.0,
+      "text": "some."
+     },
+     {
+      "t": 13.0,
+      "text": "some_"
+     },
+     {
+      "t": 14.0,
+      "text": "some-"
+     },
+     {
+      "t": 16.0,
+      "text": "som"
+     },
+     {
+      "t": 17.0,
+      "text": "some"
+     },
+     {
+      "t": 18.0,
+      "text": "some"
+     },
+     {
+      "t": 22.0,
+      "text": "some_"
+     },
+     {
+      "t": 27.0,
+      "text": "thy"
+     },
+     {
+      "t": 27.0,
+      "text": "some_"
+     },
+     {
+      "t": 28.0,
+      "text": "some_"
+     },
+     {
+      "t": 29.0,
+      "text": "ome\u2014"
+     },
+     {
+      "t": 30.0,
+      "text": "some-"
+     },
+     {
+      "t": 31.0,
+      "text": "some"
+     },
+     {
+      "t": 33.0,
+      "text": "some"
+     },
+     {
+      "t": 34.0,
+      "text": "some_"
+     },
+     {
+      "t": 35.0,
+      "text": "some_"
+     },
+     {
+      "t": 36.0,
+      "text": "some"
+     },
+     {
+      "t": 38.0,
+      "text": "some-"
+     },
+     {
+      "t": 39.0,
+      "text": "some-"
+     },
+     {
+      "t": 41.0,
+      "text": "some"
+     },
+     {
+      "t": 45.0,
+      "text": "some"
+     },
+     {
+      "t": 46.0,
+      "text": "some"
+     },
+     {
+      "t": 48.0,
+      "text": "some"
+     }
+    ],
+    "face_pct": 1.0,
+    "black": [],
+    "freeze": []
+   }
+  },
+  "04-ai-agent-accountability": {
+   "sha256": "98773e5164415bcb9b91710bec08d4986fd1f8ea9999910aaf85a16293f7c623",
+   "srt_sha256": "d6e864bb0dd2f0e1c2ecbee26c759b2a43d68e36efdcdc3c5962f3e81fc4e81f",
+   "subs": {
+    "match": 0.9776,
+    "srt_words": 156,
+    "asr_words": 157,
+    "diffs": [
+     {
+      "t": 14.82,
+      "srt": "",
+      "asr": "So,",
+      "context": "an AI agent, right? And I think it's"
+     },
+     {
+      "t": 18.95,
+      "srt": "Redbelly",
+      "asr": "RedBilly",
+      "context": "I'm not saying that Redbelly doesn't welcome AI agents."
+     },
+     {
+      "t": 26.23,
+      "srt": "he",
+      "asr": "it",
+      "context": "agent that is acting, he acts on the behalf"
+     },
+     {
+      "t": 34.09,
+      "srt": "institutions",
+      "asr": "institution",
+      "context": "is this person or institutions that acts, that should"
+     }
+    ],
+    "timing_in_cue": 0.9869,
+    "timing_worst_s": 0.54,
+    "asr_text": "There is yet another layer at the application level that consists of making sure that, for example, every account is linked to a human or an institution as opposed to an AI agent, right? So, and I think it's very important. I'm not saying that RedBilly doesn't welcome AI agents. Of course, we're using that. But what I'm saying is that if there is an AI agent that is acting, it acts on the behalf of someone else, right? And by doing that, it should make sure that there is this person or institution that acts, that should be responsible for its AI agent, right? So there is no full autonomy of the AI agent. And by having RedBelly Network associating an account to these kind of, you know, human or institutions that exist in the real world will guarantee that the AI agent who does something wrong will have a responsible party in the real world."
+   },
+   "cue_issues": [],
+   "sync": [
+    {
+     "seg": 1,
+     "from": 1024.8,
+     "to": 1047.07,
+     "head_ms": 0.1,
+     "head_corr": 0.999,
+     "tail_ms": -0.1,
+     "tail_corr": 0.994
+    },
+    {
+     "seg": 2,
+     "from": 1054.89,
+     "to": 1076.44,
+     "head_ms": -0.1,
+     "head_corr": 0.987,
+     "tail_ms": -0.1,
+     "tail_corr": 0.999
+    },
+    {
+     "seg": 3,
+     "from": 1088.95,
+     "to": 1104.4,
+     "head_ms": -0.1,
+     "head_corr": 0.982,
+     "tail_ms": -0.1,
+     "tail_corr": 0.979
+    }
+   ],
+   "bounds": [
+    {
+     "seg": 1,
+     "kind": "in",
+     "src": 1024.8,
+     "clip": 0.0,
+     "prev": "MEV.",
+     "next": "There",
+     "heard": "there",
+     "expect": "there",
+     "level_db": -59.8
+    },
+    {
+     "seg": 1,
+     "kind": "out",
+     "src": 1047.07,
+     "clip": 22.27,
+     "prev": "that.",
+     "next": "And",
+     "heard": "that",
+     "expect": "that",
+     "level_db": -50.7
+    },
+    {
+     "seg": 2,
+     "kind": "in",
+     "src": 1054.89,
+     "clip": 22.27,
+     "prev": "costs.",
+     "next": "But",
+     "heard": "but",
+     "expect": "but",
+     "level_db": -63.2
+    },
+    {
+     "seg": 2,
+     "kind": "out",
+     "src": 1076.44,
+     "clip": 43.82,
+     "prev": "agent.",
+     "next": "Yeah,",
+     "heard": "agent",
+     "expect": "agent",
+     "level_db": -50.2
+    },
+    {
+     "seg": 3,
+     "kind": "in",
+     "src": 1088.95,
+     "clip": 43.82,
+     "prev": "right?",
+     "next": "And",
+     "heard": "i",
+     "expect": "and",
+     "level_db": -59.0
+    },
+    {
+     "seg": 3,
+     "kind": "out",
+     "src": 1104.4,
+     "clip": 59.27,
+     "prev": "world.",
+     "next": "And",
+     "heard": "world",
+     "expect": "world",
+     "level_db": -59.8
+    }
+   ],
+   "cuts": [
+    {
+     "clip": 22.27,
+     "from": 1047.07,
+     "to": 1054.89,
+     "removed_s": 7.82,
+     "removed": "And it's part of the automation process, speeding up the execution and lowering the costs."
+    },
+    {
+     "clip": 43.82,
+     "from": 1076.44,
+     "to": 1088.95,
+     "removed_s": 12.51,
+     "removed": "Yeah, they're more delegates rather than they're acting on their own, they're delegates. Yeah, there is like someone can be accountable in the real world that has been making a lot of money. There should be some institution or some person, right?"
+    }
+   ],
+   "visual": {
+    "frames": 119,
+    "static_max_diff": 0.6,
+    "footer_ocr": "Vincent Gramoli Founder, Redbelly Network",
+    "header_ocr": "Every AI agent needs a human who answers for it",
+    "tag_ocr": "INSIGHTS - EPISODE 28",
+    "name_ok": true,
+    "role_ok": true,
+    "hook_ok": true,
+    "episode_ok": true,
+    "credits": [],
+    "other_text": [
+     {
+      "t": 46.0,
+      "text": "associatingjan"
+     },
+     {
+      "t": 47.0,
+      "text": "associatingjan"
+     }
+    ],
+    "face_pct": 1.0,
+    "black": [],
+    "freeze": []
+   }
+  },
+  "05-tokeniser-gateway": {
+   "sha256": "de156e6225d00d020174bfda1a39ffb2ddaaf117f1ce73a0597311c4cd256063",
+   "srt_sha256": "3e6811d2ff001069b37db00ff13b146e5a3f29249fad71126dae5a871758b552",
+   "subs": {
+    "match": 0.9884,
+    "srt_words": 173,
+    "asr_words": 173,
+    "diffs": [
+     {
+      "t": 10.66,
+      "srt": "And",
+      "asr": "",
+      "context": "do we do this? And that's very much why"
+     },
+     {
+      "t": 28.77,
+      "srt": "",
+      "asr": "them",
+      "context": "by and enables them to essentially tokenise their"
+     },
+     {
+      "t": 44.15,
+      "srt": "and",
+      "asr": "It",
+      "context": "onto the Redbelly Network and makes it easy for"
+     }
+    ],
+    "timing_in_cue": 0.9942,
+    "timing_worst_s": 0.37,
+    "asr_text": "We've always known that tokenization is the future. Real -world asset tokenization has been a very hot topic. It's been something a lot of people want to do, but the question has always been, how do we do this? That's very much why Tokenizer exists. It's meant to be that gateway, that ability for those issuers. We want to give them a platform that's familiar, easy to use, that very much traditional, in this sense, Web 2 .0 style interface, but at the same time is powered by and enables them them to essentially tokenize their assets. So it makes it easy for the issuers to essentially get onto the RedBelly network. It makes it easy for their shareholders, note holders, unit holders, whoever has invested in these issuers to get onto the RedBelly network. It makes it easy for those tokens that have been minted and issued via the tokenizer platform to be transacted on the RedBelly network. I think that's something which is going to be a great unlock for the network."
+   },
+   "cue_issues": [],
+   "sync": [
+    {
+     "seg": 1,
+     "from": 430.35,
+     "to": 447.93,
+     "head_ms": 0.0,
+     "head_corr": 0.995,
+     "tail_ms": 0.0,
+     "tail_corr": 0.996
+    },
+    {
+     "seg": 2,
+     "from": 454.34,
+     "to": 492.92,
+     "head_ms": 0.0,
+     "head_corr": 0.994,
+     "tail_ms": 0.1,
+     "tail_corr": 0.942
+    }
+   ],
+   "bounds": [
+    {
+     "seg": 1,
+     "kind": "in",
+     "src": 430.35,
+     "clip": 0.0,
+     "prev": "belly.",
+     "next": "We've",
+     "heard": "we've",
+     "expect": "we've",
+     "level_db": -50.7
+    },
+    {
+     "seg": 1,
+     "kind": "out",
+     "src": 447.93,
+     "clip": 17.58,
+     "prev": "issuers.",
+     "next": "And",
+     "heard": "issuers",
+     "expect": "issuers",
+     "level_db": -41.4
+    },
+    {
+     "seg": 2,
+     "kind": "in",
+     "src": 454.34,
+     "clip": 17.58,
+     "prev": "matter.",
+     "next": "We",
+     "heard": "we",
+     "expect": "we",
+     "level_db": -32.3
+    },
+    {
+     "seg": 2,
+     "kind": "out",
+     "src": 492.92,
+     "clip": 56.16,
+     "prev": "network.",
+     "next": "Because",
+     "heard": "network",
+     "expect": "network",
+     "level_db": -45.7
+    }
+   ],
+   "cuts": [
+    {
+     "clip": 17.58,
+     "from": 447.93,
+     "to": 454.34,
+     "removed_s": 6.41,
+     "removed": "And as we've seen with our experience with companies and soon to be in working with funds and trustees on the same matter."
+    }
+   ],
+   "visual": {
+    "frames": 112,
+    "static_max_diff": 0.59,
+    "footer_ocr": "Matt Mills Chief Customer Officer, Tokeniser",
+    "header_ocr": "Everyone wants tokenisation. Tokeniser is the how.",
+    "tag_ocr": "INSIGHTS - EPISODE 26",
+    "name_ok": true,
+    "role_ok": true,
+    "hook_ok": true,
+    "episode_ok": true,
+    "credits": [],
+    "other_text": [
+     {
+      "t": 19.0,
+      "text": "familiarXeasy,"
+     },
+     {
+      "t": 21.0,
+      "text": "thatyvery"
+     },
+     {
+      "t": 23.0,
+      "text": "senses"
+     },
+     {
+      "t": 24.0,
+      "text": "senses"
+     },
+     {
+      "t": 31.0,
+      "text": "rassets"
+     }
+    ],
+    "face_pct": 1.0,
+    "black": [],
+    "freeze": []
+   }
+  },
+  "06-acacia-instant-subscription": {
+   "sha256": "1fab14027faea4f35705b9bd7767cff3e60321cf050c618119818243ba61bc8e",
+   "srt_sha256": "054ab42e997d486b433419b3b92d7373ef335b4a1ef548916c09816e0d13e2b3",
+   "subs": {
+    "match": 0.9936,
+    "srt_words": 155,
+    "asr_words": 157,
+    "diffs": [
+     {
+      "t": 3.82,
+      "srt": "",
+      "asr": "to",
+      "context": "was, we could show, via Tokeniser, essentially, hey,"
+     },
+     {
+      "t": 49.16,
+      "srt": "",
+      "asr": "Fantastic.",
+      "context": "see that transaction. Fantastic. Instantaneous versus multi-day, multi-week."
+     }
+    ],
+    "timing_in_cue": 0.9935,
+    "timing_worst_s": 0.86,
+    "asr_text": "So what Project Acacia, coming back to the opportunity, was, we could show to via Tokenizer, essentially, hey, a subscription goes from a multi -day, multi -step process that's paper -based, where you essentially have to send the funds, cash, and hope and wait for the fund to eventually receive that cash, confirm that payment, and then issue those units. And those units are issued normally on a spreadsheet. So with Acacia, what that meant was the investor could have AUDM, stablecoin agree to subscribe to the fund and purchase those units at a set price and as soon as they agreed to that immediately those funds and those units would swap so essentially they in real time as soon as they made that payment got those units issued to them and through the platform they could see it they could go on the block explorer see that transaction fantastic Fantastic. Instantaneous versus multi -day, multi -week."
+   },
+   "cue_issues": [],
+   "sync": [
+    {
+     "seg": 1,
+     "from": 1191.55,
+     "to": 1216.09,
+     "head_ms": 0.1,
+     "head_corr": 0.985,
+     "tail_ms": -0.1,
+     "tail_corr": 0.999
+    },
+    {
+     "seg": 2,
+     "from": 1228.77,
+     "to": 1257.08,
+     "head_ms": 0.0,
+     "head_corr": 0.993,
+     "tail_ms": -0.1,
+     "tail_corr": 0.99
+    }
+   ],
+   "bounds": [
+    {
+     "seg": 1,
+     "kind": "in",
+     "src": 1191.55,
+     "clip": 0.0,
+     "prev": "opportunities.",
+     "next": "So",
+     "heard": "so",
+     "expect": "so",
+     "level_db": -32.5
+    },
+    {
+     "seg": 1,
+     "kind": "out",
+     "src": 1216.09,
+     "clip": 24.54,
+     "prev": "spreadsheet.",
+     "next": "So",
+     "heard": "spreadsheet",
+     "expect": "spreadsheet",
+     "level_db": -38.9
+    },
+    {
+     "seg": 2,
+     "kind": "in",
+     "src": 1228.77,
+     "clip": 24.54,
+     "prev": "that.",
+     "next": "So",
+     "heard": "so",
+     "expect": "so",
+     "level_db": -37.8
+    },
+    {
+     "seg": 2,
+     "kind": "out",
+     "src": 1257.08,
+     "clip": 52.85,
+     "prev": "multi-week.",
+     "next": "The",
+     "heard": "week",
+     "expect": "week",
+     "level_db": -40.1
+    }
+   ],
+   "cuts": [
+    {
+     "clip": 24.54,
+     "from": 1216.09,
+     "to": 1228.77,
+     "removed_s": 12.68,
+     "removed": "So if someone sits down, spreadsheets rule the world. Yeah, it's safe to sell in that spreadsheet and then sends you by email, if you're lucky, maybe by post a certificate that says, hey, you now own units and then you'll get a quarterly announcement about that."
+    }
+   ],
+   "visual": {
+    "frames": 106,
+    "static_max_diff": 0.63,
+    "footer_ocr": "Matt Mills Chief Customer Officer, Tokeniser",
+    "header_ocr": "Project Acacia: fund units issued the moment you pay",
+    "tag_ocr": "INSIGHTS - EPISODE 26",
+    "name_ok": true,
+    "role_ok": true,
+    "hook_ok": true,
+    "episode_ok": true,
+    "credits": [],
+    "other_text": [
+     {
+      "t": 45.0,
+      "text": "isee"
+     }
+    ],
+    "face_pct": 1.0,
+    "black": [],
+    "freeze": []
+   }
+  }
+ }
+}
