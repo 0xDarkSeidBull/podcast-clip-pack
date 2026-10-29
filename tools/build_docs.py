@@ -43,6 +43,7 @@ BANNED = [r"\bRed ?[Bb]elly\b(?<!Redbelly)", r"\bRed Belly\b", r"\bRedBelly\b", 
           r"\bTokeni[sz]er\b(?<!Tokeniser)", r"\bTokenizer\b", r"\btokeniz", r"\bAkasha\b", r"\bArcacia\b",
           r"\bRBMT\b", r"\bRevenue [Nn]etwork\b"]
 CREDIT = [r"made by", r"edited by", r"created by", r"@\w{3,}"]
+HUMAN_CHECK = "Watched and listened in full by a person"
 
 
 def probe(path):
@@ -230,7 +231,7 @@ def main():
             # a person's sign-off counts only for the exact MP4 and SRT that person watched
             h = human["clips"].get(cid, {})
             signed = h.get("result") == "PASS" and h.get("sha256") == sha256(mp4) and h.get("srt_sha256") == sha256(srt)
-            check(cid, "Watched and listened in full by a person", signed,
+            check(cid, HUMAN_CHECK, signed,
                   f"{human['reviewer']}, {h.get('date', '')}" if signed else "not signed off for these files")
 
         segs = c["segments"]
@@ -412,7 +413,9 @@ def write_verification_md(checks, rows, report, review):
 
 def write_index(rows, checks):
     e = html.escape
-    passed = sum(1 for c in checks if c[2] == "PASS")
+    auto = [c for c in checks if c[1] != HUMAN_CHECK]      # the person's sign-off is not an automated check
+    passed = sum(1 for c in auto if c[2] == "PASS")
+    watched = sum(1 for c in checks if c[1] == HUMAN_CHECK and c[2] == "PASS")
     lufs = [r["lufs"] for r in rows]
     play_icon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>'
     copy_icon = ('<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/>'
@@ -640,7 +643,7 @@ def write_index(rows, checks):
       <div class="stat"><b>{len(rows)}</b><span>vertical clips</span></div>
       <div class="stat"><b>1080&times;1920</b><span>9:16 &middot; 30 fps &middot; MP4</span></div>
       <div class="stat"><b>{sum(lufs) / len(lufs):.0f} LUFS</b><span>even audio across all clips</span></div>
-      <div class="stat"><b>{passed}/{len(checks)}</b><span>automated checks passed</span></div>
+      <div class="stat"><b>{passed}/{len(auto)}</b><span>automated checks passed</span></div>
     </div>
   </div>
 </header>
@@ -663,7 +666,7 @@ def write_index(rows, checks):
     </div></div>
     <p class="note">Full results, including subtitles checked against an independent transcript of each clip's audio,
       every edit point checked against the source episode, and on-screen text read back from the frames, are in the
-      <a href="VERIFICATION.md">verification report</a>.</p>
+      <a href="VERIFICATION.md">verification report</a>.{f" All {watched} clips were also watched and listened to in full by a person." if watched == len(rows) else ""}</p>
   </section>
 </main>
 
