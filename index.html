@@ -22,7 +22,7 @@
     --radius: 6px; --r-sm: 4px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font: 16px/1.6 "Readex Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -77,6 +77,15 @@
   .btn.primary:hover { background: var(--red-2); border-color: var(--red-2); }
   .btn.ghost { background: transparent; }
   .btn.lg { height: 48px; padding: 0 22px; font-size: 15px; }
+  .to-top { position: fixed; right: 16px; bottom: 16px; z-index: 30; width: 48px; height: 48px; display: grid; place-items: center;
+            border-radius: var(--r-sm); border: 1px solid var(--line-2); background: rgba(20,37,48,.88); color: #fff; cursor: pointer;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .2s, transform .2s, visibility .2s, background .2s, border-color .2s; }
+  .to-top.show { opacity: 1; visibility: visible; transform: none; }
+  .to-top:hover { background: var(--red); border-color: var(--red); }
+  .to-top:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+  .to-top svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  @media (min-width: 720px) { .to-top { right: 24px; bottom: 24px; } }
   .btn svg, .copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
   /* section heads */
@@ -369,6 +378,8 @@
   </div>
 </footer>
 
+<button class="to-top" type="button" aria-label="Back to top" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg></button>
+
 <script>
   (function () {
     var videos = Array.prototype.slice.call(document.querySelectorAll(".player video"));
@@ -396,7 +407,8 @@
       b.addEventListener("click", function () {
         var v = b.parentNode.querySelector("video");
         var p = v.play();
-        if (p && p.catch) p.catch(function () {});
+        // If the browser refuses to start playback, show the native controls so the clip is not stuck on its poster.
+        if (p && p.catch) p.catch(function () { v.controls = true; v.parentNode.classList.add("started"); });
       });
     });
 
@@ -413,11 +425,43 @@
       b.addEventListener("click", function () {
         var t = b.getAttribute("data-copy");
         var done = function (msg) { label.textContent = msg; setTimeout(function () { label.textContent = "Copy caption"; }, 1800); };
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(t).then(function () { done("Copied"); }, function () { done("Copy failed"); });
-        } else { done("Select the text to copy"); }
+        // Older browsers and pages served without HTTPS have no clipboard API, so fall back to a hidden text area.
+        var legacy = function () {
+          var ta = document.createElement("textarea");
+          ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+          document.body.appendChild(ta); ta.select();
+          var ok = false;
+          try { ok = document.execCommand("copy"); } catch (e) {}
+          document.body.removeChild(ta);
+          done(ok ? "Copied" : "Copy failed");
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(t).then(function () { done("Copied"); }, legacy);
+        } else { legacy(); }
       });
     });
+
+    // Back to top button, shown once the page has scrolled past the hero.
+    var toTop = document.querySelector(".to-top");
+    if (toTop) {
+      var ticking = false;
+      var update = function () {
+        var show = window.scrollY > 600;
+        toTop.classList.toggle("show", show);
+        toTop.tabIndex = show ? 0 : -1;
+        ticking = false;
+      };
+      window.addEventListener("scroll", function () {
+        if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+      toTop.addEventListener("click", function () {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+        var top = document.getElementById("top");
+        if (top) { top.setAttribute("tabindex", "-1"); top.focus({ preventScroll: true }); }
+      });
+    }
   })();
 </script>
 </body>
