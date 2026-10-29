@@ -9,7 +9,8 @@ The default model, Whisper large-v3, is deliberately not the one that made the s
 
 For every clip it measures:
   - subtitles: the SRT words against a fresh transcript of the clip's own audio, and whether
-    each word is spoken while its cue is on screen
+    each word is spoken while its cue is on screen (word times from a wav2vec 2.0 CTC model,
+    which is neither Whisper nor the MMS_FA aligner that timed the subtitles)
   - edits: that the clip audio is the listed source ranges (cross-correlation against the
     episode), the audio level at every edit point (a pause, or the quietest point between two
     words), and the words each cut removes (that audio transcribed on its own)
@@ -19,7 +20,8 @@ For every clip it measures:
 
 Writes verification/report.json and verification/<id>.jpg. tools/build_docs.py turns the
 report and the manual verdicts in verification/review.json into checks, VERIFICATION.md and
-the review page. Needs faster-whisper, opencv-python-headless, pillow, ffmpeg and tesseract.
+the review page. Needs faster-whisper, torch and torchaudio, opencv-python-headless, pillow,
+ffmpeg and tesseract.
 """
 import difflib
 import hashlib
@@ -38,6 +40,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "verification")
 W, H = 1080, 1920
 VID_Y, VID_H = 380, 1350          # video window, as in tools/render.py
+CAP_Y = VID_H - 170               # centre of the caption line in the video window, as in tools/render.py
 SR = 16000
 FONT = os.path.join(ROOT, "assets", "fonts", "ReadexPro-Medium.ttf")
 # YuNet face detector (OpenCV Zoo, MIT licence): finds profile and three-quarter faces that Haar misses
@@ -78,6 +81,40 @@ def transcribe(model, pcm, t0=0.0):
                                condition_on_previous_text=False, vad_filter=True)
     return [{"s": round(t0 + w.start, 3), "e": round(t0 + w.end, 3), "w": w.word.strip()}
             for sg in segs for w in sg.words]
+
+
+_CTC = {}
+
+
+def ctc_words(pcm):
+    """Words and their times heard by a CTC speech model (wav2vec 2.0 large, LibriSpeech 960 h, from
+    torchaudio), decoded greedily. Its letters are tied to 20 ms frames, so its word times are what the
+    on-screen timing is checked against: Whisper's word times drift by up to a second around pauses
+    and fillers. It is a different model from the MMS_FA aligner that timed the subtitles."""
+    import torch
+    import torchaudio
+    if "model" not in _CTC:
+        bundle = torchaudio.pipelines.WAV2VEC2_ASR_LARGE_LV60K_960H
+        _CTC["model"], _CTC["labels"] = bundle.get_model().eval(), bundle.get_labels()
+    labels = _CTC["labels"]
+    with torch.inference_mode():
+        emission, _ = _CTC["model"](torch.tensor(pcm).unsqueeze(0))
+    sec = len(pcm) / emission.size(1) / SR
+    words, cur, prev = [], None, None
+    for i, k in enumerate(emission[0].argmax(-1).tolist()):
+        if k != prev and k != 0:                      # 0 is the CTC blank
+            if labels[k] == "|":
+                cur = None
+            elif cur is None:
+                cur = {"s": round(i * sec, 3), "e": round((i + 1) * sec, 3), "w": labels[k].lower()}
+                words.append(cur)
+            else:
+                cur["w"] += labels[k].lower()
+                cur["e"] = round((i + 1) * sec, 3)
+        elif k == prev and cur is not None and labels[k] != "|":
+            cur["e"] = round((i + 1) * sec, 3)
+        prev = k
+    return words
 
 
 def tokens(words):
@@ -132,27 +169,53 @@ def segments(clip):
 
 # ---------------------------------------------------------------- subtitles vs audio
 
-def check_subs(cues, asr):
-    srt_words, cue_of = [], []
+def cue_words(cues):
+    """The subtitle words in order, and the cue each one is in."""
+    words, cue_of = [], []
     for ci, c in enumerate(cues):
         for w in c["text"].split():
-            srt_words.append(w)
+            words.append(w)
             cue_of.append(ci)
+    return words, cue_of
+
+
+def compare(srt_words, heard):
+    """Token lists for the subtitles and a transcript, and their word-by-word alignment."""
     a = tokens(srt_words)
-    b = tokens([w["w"] for w in asr])
+    b = tokens([w["w"] for w in heard])
     a, b = join_compounds(a, b), join_compounds(b, a)
-    sm = difflib.SequenceMatcher(None, [x[0] for x in a], [x[0] for x in b], autojunk=False)
-    diffs, inside, worst, matched = [], 0, 0.0, 0
+    return a, b, difflib.SequenceMatcher(None, [x[0] for x in a], [x[0] for x in b], autojunk=False)
+
+
+def check_timing(cues, heard):
+    """Whether each subtitle word is spoken while its cue is on screen: every word the CTC model hears
+    the same as the subtitles must have its midpoint within 0.3 s of its cue."""
+    srt_words, cue_of = cue_words(cues)
+    a, b, sm = compare(srt_words, heard)
+    inside, worst, matched, late = 0, 0.0, 0, []
+    for op, i1, i2, j1, j2 in sm.get_opcodes():
+        if op != "equal":
+            continue
+        for k in range(i2 - i1):
+            c = cues[cue_of[a[i1 + k][1]]]
+            w = heard[b[j1 + k][1]]
+            mid = (w["s"] + w["e"]) / 2
+            off = max(c["s"] - mid, mid - c["e"], 0.0)
+            inside += off <= 0.3
+            worst = max(worst, off)
+            matched += 1
+            if off > 0.3:
+                late.append({"t": round(mid, 2), "word": srt_words[a[i1 + k][1]], "cue": [c["s"], c["e"]]})
+    return {"timing_in_cue": round(inside / max(matched, 1), 4), "timing_worst_s": round(worst, 2),
+            "timing_words": matched, "timing_off": late, "ctc_text": " ".join(w["w"] for w in heard)}
+
+
+def check_subs(cues, asr):
+    srt_words, cue_of = cue_words(cues)
+    a, b, sm = compare(srt_words, asr)
+    diffs = []
     for op, i1, i2, j1, j2 in sm.get_opcodes():
         if op == "equal":
-            for k in range(i2 - i1):
-                c = cues[cue_of[a[i1 + k][1]]]
-                w = asr[b[j1 + k][1]]
-                mid = (w["s"] + w["e"]) / 2
-                off = max(c["s"] - mid, mid - c["e"], 0.0)
-                inside += off <= 0.3
-                worst = max(worst, off)
-                matched += 1
             continue
         si = sorted({a[k][1] for k in range(i1, i2)})
         aj = sorted({b[k][1] for k in range(j1, j2)})
@@ -169,7 +232,6 @@ def check_subs(cues, asr):
                       "asr": " ".join(asr[k]["w"] for k in range(aj[0], aj[-1] + 1)) if aj else "",
                       "context": " ".join(srt_words[max(0, lo - 4):hi + 4])})
     return {"match": round(sm.ratio(), 4), "srt_words": len(a), "asr_words": len(b), "diffs": diffs,
-            "timing_in_cue": round(inside / max(matched, 1), 4), "timing_worst_s": round(worst, 2),
             "asr_text": " ".join(w["w"] for w in asr)}
 
 
@@ -202,9 +264,9 @@ def ncc(sig, tpl):
     return k, float(r[k])
 
 
-def check_sync(clip_pcm, src_pcm, src_t0, segs):
+def check_sync(clip_pcm, src_pcm, src_t0, segs, lead=0.0):
     """Find each segment's head and tail in the episode; error vs the listed timestamps in ms."""
-    out, off = [], 0.0
+    out, off = [], lead
     for i, (a, b, *_) in enumerate(segs):
         d = b - a
         L = min(3.0, d - 0.8)
@@ -233,7 +295,7 @@ def kept_words(cues, off, d):
     return [w for c in cues if off - 0.01 <= c["s"] < off + d - 0.01 for w in c["text"].split()]
 
 
-def check_cuts(model, cues, src_pcm, src_t0, segs):
+def check_cuts(model, cues, src_pcm, src_t0, segs, lead=0.0):
     """Level at every edit point, the words either side of it, and what each cut leaves out.
 
     The audio a cut removes is transcribed on its own, so the list of removed words does not
@@ -259,15 +321,15 @@ def check_cuts(model, cues, src_pcm, src_t0, segs):
         words = tokens([w["w"] for w in transcribe(model, np.concatenate([pad, pcm, pad]))])
         return (words[0][0] if kind == "in" else words[-1][0]) if words else ""
 
-    lead = heard(segs[0][0] - 4, segs[0][0])
-    tail = heard(segs[-1][1], segs[-1][1] + 4)
+    opening = heard(segs[0][0] - 4, segs[0][0])
+    closing = heard(segs[-1][1], segs[-1][1] + 4)
     gaps = [heard(b, segs[i + 1][0]) for i, (a, b, *_) in enumerate(segs[:-1])]
-    bounds, cuts, off = [], [], 0.0
+    bounds, cuts, off = [], [], lead
     for i, (a, b, *_) in enumerate(segs):
         d = b - a
         kept = kept_words(cues, off, d)
-        before = lead if i == 0 else gaps[i - 1]
-        after = tail if i == len(segs) - 1 else gaps[i]
+        before = opening if i == 0 else gaps[i - 1]
+        after = closing if i == len(segs) - 1 else gaps[i]
         first, last = tokens(kept[:2]), tokens(kept[-2:])
         bounds.append({"seg": i + 1, "kind": "in", "src": a, "clip": round(off, 2),
                        "prev": before[-1] if before else "", "next": kept[0] if kept else "",
@@ -300,7 +362,7 @@ def frames(path, fps=2):
 
 
 def ocr(img, psm=11):
-    """Words tesseract reads with confidence, as [(text, conf)]."""
+    """Words tesseract reads, as [(text, confidence, vertical centre in the image)]."""
     ok, png = cv2.imencode(".png", cv2.cvtColor(img, cv2.COLOR_RGB2GRAY))
     tsv = subprocess.run(["tesseract", "stdin", "stdout", "--psm", str(psm), "tsv"], input=png.tobytes(),
                          capture_output=True).stdout.decode(errors="ignore")
@@ -308,8 +370,24 @@ def ocr(img, psm=11):
     for line in tsv.splitlines()[1:]:
         f = line.split("\t")
         if len(f) == 12 and f[11].strip() and float(f[10]) >= 0:
-            out.append((f[11].strip(), float(f[10])))
+            out.append((f[11].strip(), float(f[10]), int(f[7]) + int(f[9]) / 2))
     return out
+
+
+def caption_at(cues, t):
+    """Letters of the caption lines that can be on screen at t (a line stays up through a pause of up
+    to 1.5 s after its cue ends, see tools/render.py)."""
+    return "".join(re.sub(r"[^a-z]", "", c["text"].lower()) for c in cues if c["s"] - 0.1 <= t <= c["e"] + 1.6)
+
+
+def in_caption(text, caption):
+    """Whether OCR text is part of the caption on screen, allowing for the words OCR fuses or misreads
+    ("Redbellyjdoesn" for "Redbelly doesn't")."""
+    x = re.sub(r"[^a-z]", "", text.lower())
+    if len(x) < 3:
+        return False
+    return max(difflib.SequenceMatcher(None, x, caption[i:i + len(x)]).ratio()
+               for i in range(max(1, len(caption) - len(x) + 1))) >= 0.8
 
 
 def face_detector(w, h):
@@ -343,20 +421,22 @@ def check_visuals(path, clip, cues, dur, sheet_path):
         _, found = det.detect(cv2.cvtColor(cv2.resize(win, (fw, fh)), cv2.COLOR_RGB2BGR))
         face_hits += found is not None and len(found) > 0
         if abs(t - round(t)) < 1e-6:          # OCR the video window once a second
-            for text, conf in ocr(win):
+            for text, conf, y in ocr(win):
                 if conf < 50:
                     continue
+                if abs(y - CAP_Y) <= 60 and in_caption(text, caption_at(cues, t)):
+                    continue                  # the burned-in caption line
                 low = text.lower()
                 if any(re.search(p, low) for p in CREDIT):
                     credits.append({"t": t, "text": text})
-                # burned-in caption words (OCR often fuses or clips them) are expected; anything else is listed
+                # other caption words (OCR often fuses or clips them) are expected; anything else is listed
                 parts = [x for x in norm(text).split() if len(x) >= 3]
                 if conf >= 70 and parts and not all(any(x in v for v in vocab) for x in parts):
                     other.append({"t": t, "text": text})
     # on-screen text in the branded frame, read back from the rendered video
-    foot_txt = " ".join(t for t, c in ocr(np.ascontiguousarray(foot), psm=6) if c >= 40)
-    head_txt = " ".join(t for t, c in ocr(np.ascontiguousarray(head[150:]), psm=6) if c >= 40)
-    tag_txt = " ".join(t for t, c in ocr(np.ascontiguousarray(head[60:150, 560:]), psm=7) if c >= 0)
+    foot_txt = " ".join(t for t, c, _ in ocr(np.ascontiguousarray(foot), psm=6) if c >= 40)
+    head_txt = " ".join(t for t, c, _ in ocr(np.ascontiguousarray(head[150:]), psm=6) if c >= 40)
+    tag_txt = " ".join(t for t, c, _ in ocr(np.ascontiguousarray(head[60:150, 560:]), psm=7) if c >= 0)
     fn, ft, fh = norm(foot_txt), norm(head_txt), norm(tag_txt)
 
     # black or frozen video inside the window
@@ -401,7 +481,8 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     rpath = os.path.join(OUT, "report.json")
     report = json.load(open(rpath)) if os.path.exists(rpath) else {}
-    report.update({"model": model_name, "tool": "tools/verify_av.py"})
+    report.update({"model": model_name, "timing_model": "wav2vec 2.0 large (torchaudio WAV2VEC2_ASR_LARGE_LV60K_960H)",
+                   "tool": "tools/verify_av.py"})
     report.setdefault("clips", {})
     model = WhisperModel(model_name, device="cpu", compute_type="int8", cpu_threads=os.cpu_count() or 4)
     for c in clips:
@@ -411,7 +492,8 @@ def main():
         mp4 = os.path.join(ROOT, "clips", f"{cid}.mp4")
         cues = parse_srt(os.path.join(ROOT, "subtitles", f"{cid}.srt"))
         segs = segments(c)
-        dur = sum(b - a for a, b, *_ in segs)
+        lead = c.get("lead_in", 0.0)
+        dur = sum(b - a for a, b, *_ in segs) + lead
         src = os.path.join(src_dir, f"ep{c['episode']}.mp4")
         lo, hi = segs[0][0], segs[-1][1]
         t0 = max(0.0, lo - 4)
@@ -419,14 +501,16 @@ def main():
         clip_pcm = audio(mp4)
         print(f"== {cid}: transcribing the clip audio and the audio each cut removes with {model_name}", flush=True)
         asr = transcribe(model, clip_pcm)
-        bounds, cuts = check_cuts(model, cues, src_pcm, t0, segs)
+        subs = check_subs(cues, asr)
+        subs.update(check_timing(cues, ctc_words(clip_pcm)))
+        bounds, cuts = check_cuts(model, cues, src_pcm, t0, segs, lead)
         print("   checking frames", flush=True)
         report["clips"][cid] = {
             "sha256": sha256(mp4),
             "srt_sha256": sha256(os.path.join(ROOT, "subtitles", f"{cid}.srt")),
-            "subs": check_subs(cues, asr),
+            "subs": subs,
             "cue_issues": check_cues(cues, dur),
-            "sync": check_sync(clip_pcm, src_pcm, t0, segs),
+            "sync": check_sync(clip_pcm, src_pcm, t0, segs, lead),
             "bounds": bounds,
             "cuts": cuts,
             "visual": check_visuals(mp4, c, cues, dur, os.path.join(OUT, f"{cid}.jpg")),

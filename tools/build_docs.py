@@ -56,6 +56,22 @@ def probe(path):
             "size": int(out["format"]["size"]), "tags": out["format"].get("tags", {})}
 
 
+def audio_frames(path):
+    """Number of AAC packets, and how many are not one 1024-sample frame starting where the previous
+    one ended (the last packet aside): any such packet is a gap or overlap in the audio timeline."""
+    out = subprocess.check_output(["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries",
+                                   "packet=pts,duration", "-of", "csv=p=0", path], text=True)
+    pk = [tuple(int(x) for x in line.split(",")[:2]) for line in out.split()]
+    odd = sum(1 for k, (pts, d) in enumerate(pk)
+              if (d != 1024 and k < len(pk) - 1) or (k and pts != pk[k - 1][0] + pk[k - 1][1]))
+    return len(pk), odd
+
+
+def timing_verdict(entries, x):
+    """Verdict on a word the timing check found outside its cue (same word, within 0.3 s)."""
+    return next((e["verdict"] for e in entries if e["word"] == x["word"] and abs(e["t"] - x["t"]) <= 0.3), None)
+
+
 def loudness(path):
     p = subprocess.run(["ffmpeg", "-hide_banner", "-i", path, "-af", "ebur128=peak=true", "-f", "null", "-"],
                        capture_output=True, text=True)
@@ -117,8 +133,10 @@ def verdict(entries, **want):
 def main():
     clips = json.load(open(os.path.join(ROOT, "clips.json")))
     rpath, vpath = os.path.join(VER, "report.json"), os.path.join(VER, "review.json")
+    hpath = os.path.join(VER, "human_review.json")
     report = json.load(open(rpath)) if os.path.exists(rpath) else {"clips": {}}
     review = json.load(open(vpath)) if os.path.exists(vpath) else {"clips": {}}
+    human = json.load(open(hpath)) if os.path.exists(hpath) else None
     rows, checks, ok = [], [], True
 
     def check(cid, name, passed, detail):
@@ -142,6 +160,9 @@ def main():
         check(cid, "MP4 / H.264 + AAC", p["vcodec"] == "h264" and p["acodec"] == "aac", f"{p['vcodec']} + {p['acodec']}")
         check(cid, "30-60 s", 30 <= p["dur"] <= 60.5, f"{p['dur']:.1f} s")
         check(cid, "Loudness -14 LUFS +/-1", abs(lufs + 14) <= 1.0, f"{lufs:.1f} LUFS, peak {peak:.1f} dBFS")
+        n, odd = audio_frames(mp4)
+        check(cid, "Audio frames evenly timed (no gaps or overlaps)", not odd,
+              f"{n} AAC frames of 1024 samples" if not odd else f"{odd} of {n} AAC frames off the timeline")
         bad = [b for b in BANNED if re.search(b, text)]
         check(cid, "Subtitle spelling (Redbelly, Tokeniser, Acacia...)", not bad, "clean" if not bad else ", ".join(bad))
         meta = " ".join(str(v) for v in p["tags"].values()).lower()
@@ -166,8 +187,11 @@ def main():
             check(cid, "Every subtitle difference reviewed against the audio", not open_diffs,
                   f"{len(s['diffs'])} of {len(s['diffs'])} reviewed" if not open_diffs
                   else "unreviewed: " + "; ".join(f"{d['srt']!r} vs {d['asr']!r}" for d in open_diffs[:3]))
-            check(cid, "Subtitle timing (word spoken while its cue is on screen)", s["timing_in_cue"] >= 0.95,
-                  f"{s['timing_in_cue']:.1%} of words within 0.3 s, worst {s['timing_worst_s']:.2f} s")
+            late = [x for x in s["timing_off"] if not timing_verdict(rv.get("timing", []), x)]
+            check(cid, "Subtitle timing (word spoken while its cue is on screen)", s["timing_in_cue"] >= 0.95 and not late,
+                  f"{s['timing_in_cue']:.1%} of {s['timing_words']} words within 0.3 s"
+                  + (f", {len(s['timing_off'])} outside reviewed" if s["timing_off"] else "") if not late
+                  else "unreviewed: " + "; ".join(f"{x['word']!r} at {clock(x['t'])}" for x in late[:3]))
             err = max(max(abs(x["head_ms"]), abs(x["tail_ms"])) for x in r["sync"])
             corr = min(min(x["head_corr"], x["tail_corr"]) for x in r["sync"])
             check(cid, "Clip audio is exactly the listed source ranges", err <= 40 and corr >= 0.8,
@@ -201,7 +225,13 @@ def main():
             check(cid, "No black or frozen video", not v["black"] and not v["freeze"],
                   "none" if not v["black"] and not v["freeze"] else f"black {v['black']}, frozen {v['freeze']}")
             check(cid, "Contact sheet reviewed", bool(rv.get("frames")),
-                  "reviewed (see Manual review)" if rv.get("frames") else "not reviewed")
+                  "reviewed (see review notes)" if rv.get("frames") else "not reviewed")
+        if human:
+            # a person's sign-off counts only for the exact MP4 and SRT that person watched
+            h = human["clips"].get(cid, {})
+            signed = h.get("result") == "PASS" and h.get("sha256") == sha256(mp4) and h.get("srt_sha256") == sha256(srt)
+            check(cid, "Watched and listened in full by a person", signed,
+                  f"{human['reviewer']}, {h.get('date', '')}" if signed else "not signed off for these files")
 
         segs = c["segments"]
         stamps = ", ".join(f"{clock(s[0])}-{clock(s[1])}" for s in segs)
@@ -263,7 +293,10 @@ def write_verification_md(checks, rows, report, review):
            f"**{passed} of {len(checks)} checks pass.**", "",
            "- [All checks](#all-checks)", "- [Subtitles against the audio](#subtitles-against-the-audio)",
            "- [Edits against the source episode](#edits-against-the-source-episode)",
-           "- [What is on screen](#what-is-on-screen)", "- [Manual review](#manual-review)", "",
+           "- [What is on screen](#what-is-on-screen)"]
+    if os.path.exists(os.path.join(VER, "human_review.json")):
+        out.append("- [Human review](#human-review)")
+    out += ["- [Review notes on the automated findings](#review-notes-on-the-automated-findings)", "",
            "## All checks", "",
            "| Clip | Check | Result | Measured |", "|------|-------|--------|----------|"]
     out += [f"| {c} | {n} | {s} | {md(d)} |" for c, n, s, d in checks]
@@ -274,9 +307,13 @@ def write_verification_md(checks, rows, report, review):
     out += ["## Subtitles against the audio", "",
             f"The final audio of each clip was transcribed again with Whisper `{model}`, a different and larger model than "
             "the `medium.en` used for the subtitles, and compared word by word with the SRT (case, punctuation, "
-            "hyphens, fillers and British/American spelling ignored). Timing counts a word as on time when the "
-            "independent transcript has it spoken within 0.3 s of its cue being on screen. Every remaining difference "
-            "is listed with the verdict after checking that moment of the audio.", ""]
+            "hyphens, fillers and British/American spelling ignored). Every remaining difference is listed with the "
+            "verdict after checking that moment of the audio.", "",
+            "Timing is measured with a third model, wav2vec 2.0 (a CTC speech model, run through torchaudio), because "
+            "Whisper's word times drift by up to a second around pauses and fillers while a CTC model's words are tied "
+            "to 20 ms frames. It is also a different model from the MMS_FA aligner that timed the subtitles. A word "
+            "counts as on time when the midpoint of the word as wav2vec 2.0 hears it is within 0.3 s of its cue being "
+            "on screen; every word outside that is listed with a verdict.", ""]
     for r in rows:
         rep = r["report"]
         if not rep:
@@ -284,7 +321,13 @@ def write_verification_md(checks, rows, report, review):
         s = rep["subs"]
         out += [f"### {r['id']}", "",
                 f"{s['match']:.1%} word match ({s['srt_words']} subtitle words, {s['asr_words']} transcript words); "
-                f"{s['timing_in_cue']:.1%} of words on time.", ""]
+                f"{s['timing_in_cue']:.1%} of {s['timing_words']} words on time.", ""]
+        if s["timing_off"]:
+            out += ["| Heard at | Word | Cue on screen | Verdict |", "|---|---|---|---|"]
+            for x in s["timing_off"]:
+                v = timing_verdict(r["review"].get("timing", []), x) or "NOT REVIEWED"
+                out.append(f"| {clock(x['t'])} | {md(x['word'])} | {clock(x['cue'][0])}-{clock(x['cue'][1])} | {md(v)} |")
+            out.append("")
         if s["diffs"]:
             out += ["| Clip time | Subtitles | Independent transcript | Verdict |", "|---|---|---|---|"]
             for d in s["diffs"]:
@@ -345,7 +388,19 @@ def write_verification_md(checks, rows, report, review):
                 out.append(f"  - `{x['text']}` at {clock(x['t'])}: {vd}")
         out += ["", f"![Contact sheet for {r['id']}](verification/{r['id']}.jpg)", ""]
 
-    out += ["## Manual review", ""]
+    hpath = os.path.join(VER, "human_review.json")
+    if os.path.exists(hpath):
+        human = json.load(open(hpath))
+        out += ["## Human review", "", f"**Reviewer:** {human['reviewer']}", "", human["how"], ""]
+        for rd in human["rounds"]:
+            out += [f"### Round {rd['round']} ({rd['date']}): {rd['result']}", ""]
+            if rd.get("findings"):
+                out += ["| Clip | At | Found | Fix |", "|---|---|---|---|"]
+                out += [f"| {f['clip']} | {f['at']} | {md(f['found'])} | {md(f['fix'])} |" for f in rd["findings"]]
+                out.append("")
+        out += ["Each clip's sign-off is tied to the SHA-256 of the MP4 and SRT that were watched, so any later "
+                "change to a clip voids it until it is watched again.", ""]
+    out += ["## Review notes on the automated findings", ""]
     out += [review.get("note", ""), ""] if review.get("note") else []
     for r in rows:
         if r["review"].get("frames"):

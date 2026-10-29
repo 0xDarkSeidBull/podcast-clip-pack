@@ -124,7 +124,7 @@ def chunk(words, max_chars=24, max_words=5):
         nxt = words[i + 1] if i + 1 < len(words) else None
         gap = (nxt["s"] - w["e"]) if nxt else 9
         nxt_len = len(text) + 1 + len(nxt["w"]) if nxt else 0
-        if (not nxt or nxt.get("cut") or re.search(r"[.?!,;:]$", w["w"]) and len(cur) >= 2 or gap > 0.45
+        if (not nxt or nxt.get("cut") or nxt.get("br") or re.search(r"[.?!,;:]$", w["w"]) and len(cur) >= 2 or gap > 0.45
                 or len(cur) >= max_words or nxt_len > max_chars):
             out.append(cur)
             cur = []
@@ -153,7 +153,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     for ci, c in enumerate(chunks):
         c_end = c[-1]["e"]
         nxt = chunks[ci + 1][0]["s"] if ci + 1 < len(chunks) else None
-        if nxt is not None and nxt - c_end < 0.6:
+        # through a pause of up to 1.5 s the line stays up with its last word lit until the next
+        # line starts ("blockchain ... um ... is pretty important")
+        if nxt is not None and nxt - c_end < 1.5:
             c_end = nxt
         # SRT cues never overlap: hold each line 150 ms after its last word, but end it
         # no later than the next line starts (overlapping cues are rejected or stacked by some platforms)
@@ -190,15 +192,59 @@ def in_segment(w, a, b, pcm, t0, sr=16000):
     return inside > energy(w["s"], w["e"]) - inside
 
 
-def clip_words(allw, segs, pcm, t0):
-    """Words of each range on the output timeline; "cut" starts a new caption line at each jump cut."""
-    words, offset = [], 0.0
+_ALIGNER = {}
+# Numbers in the subtitles, as the aligner should hear them
+SPOKEN = {"2019": "twenty nineteen", "2.0": "two point o"}
+
+
+def spoken(word):
+    """Letters the aligner listens for in a subtitle word ("double-spend," -> double spend)."""
+    w = word.replace("\u2019", "'")
+    for k, v in SPOKEN.items():
+        w = w.replace(k, f" {v} ")
+    w = re.sub(r"[-\u2010-\u2015]", " ", w).lower()
+    return [p for p in re.sub(r"[^a-z' ]", "", w).split() if p.strip("'")]
+
+
+def align(words, pcm, sr=16000):
+    """Start and end (seconds into pcm) of each word, by CTC forced alignment of the subtitle text
+    with torchaudio's MMS_FA model. Whisper's own word times can be half a second off around
+    pauses and fillers ("blockchain, um, is"); the aligner finds where each word is spoken."""
+    import torch
+    import torchaudio
+    import torchaudio.functional as F
+    if "model" not in _ALIGNER:
+        bundle = torchaudio.pipelines.MMS_FA
+        _ALIGNER["model"], _ALIGNER["dict"] = bundle.get_model().eval(), bundle.get_dict()
+    model, index = _ALIGNER["model"], _ALIGNER["dict"]
+    tokens, owner = [], []                   # letter ids, and the word each letter belongs to
+    for i, w in enumerate(words):
+        for c in "".join(spoken(w["w"])):
+            tokens.append(index[c])
+            owner.append(i)
+    if not tokens:
+        return [None] * len(words)
+    with torch.inference_mode():
+        emission, _ = model(torch.tensor(pcm).unsqueeze(0))
+    path, score = F.forced_align(emission, torch.tensor([tokens], dtype=torch.int32), blank=0)
+    sec = len(pcm) / emission.size(1) / sr
+    out = [None] * len(words)
+    for span, i in zip(F.merge_tokens(path[0], score[0].exp()), owner):
+        a, b = span.start * sec, span.end * sec
+        out[i] = (min(out[i][0], a), max(out[i][1], b)) if out[i] else (a, b)
+    return out
+
+
+def clip_words(allw, segs, pcm, t0, lead=0.0):
+    """Words of each range on the output timeline, timed by forced alignment against that range's
+    audio; "cut" starts a new caption line at each jump cut."""
+    words, offset = [], lead
     for a, b, *_ in segs:
-        first = True
-        for w in allw:
-            if in_segment(w, a, b, pcm, t0):
-                words.append(dict(w, s=max(a, w["s"]) - a + offset, e=min(b, w["e"]) - a + offset, cut=first))
-                first = False
+        mine = [w for w in allw if in_segment(w, a, b, pcm, t0)]
+        spans = align(mine, pcm[int((a - t0) * 16000):int((b - t0) * 16000)])
+        for k, (w, span) in enumerate(zip(mine, spans)):
+            s, e = (a + span[0], a + span[1]) if span else (max(a, w["s"]), min(b, w["e"]))
+            words.append(dict(w, s=s - a + offset, e=e - a + offset, cut=k == 0))
         offset += b - a
     return words
 
@@ -219,8 +265,9 @@ def crop_expr(plan):
     return expr
 
 
-def graph(clip, segs, lo, cw, ch, y0, plans, ass, bg_dur):
-    """filter_complex for: per-segment trim + face-tracked square crop, concat, frame overlay, captions."""
+def graph(clip, segs, lo, cw, ch, y0, plans, ass, bg_dur, lead=0.0):
+    """filter_complex for: per-segment trim + face-tracked square crop, concat, frame overlay, captions.
+    `lead` seconds of silence open the clip on the speaker's first frame, before the first word."""
     parts, aparts, vlabels, alabels = [], [], [], []
     for i, (seg, plan) in enumerate(zip(segs, plans)):
         a, b = seg[:2]
@@ -228,7 +275,8 @@ def graph(clip, segs, lo, cw, ch, y0, plans, ass, bg_dur):
         # optional third value: first usable video frame (skips a cutaway away from the speaker
         # by holding that frame for the first few hundred ms; audio is untouched)
         va = seg[2] if len(seg) > 2 else a
-        hold = f",tpad=start_mode=clone:start_duration={va - a:.3f}" if va > a else ""
+        pad = va - a + (lead if i == 0 else 0.0)
+        hold = f",tpad=start_mode=clone:start_duration={pad:.3f}" if pad > 0 else ""
         parts.append(f"[1:v]trim=start={va - lo:.3f}:end={b - lo:.3f},setpts=PTS-STARTPTS,fps={FPS}{hold},"
                      f"crop={cw}:{ch}:'{crop_expr(plan)}':{y0},scale={VID_W}:{VID_H}:flags=lanczos,setsar=1[v{i}]")
         aparts.append(f"[1:a]atrim=start={a - lo:.3f}:end={b - lo:.3f},asetpts=PTS-STARTPTS,"
@@ -248,12 +296,14 @@ def render(clip, src_dir, work, subs_only=False):
     cid = clip["id"]
     segs = clip.get("segments") or [[clip["start"], clip["end"]]]
     lo, hi = segs[0][0], segs[-1][1]
-    dur = sum(sg[1] - sg[0] for sg in segs)
+    lead = clip.get("lead_in", 0.0)          # optional silent beat before the first word
+    dur = sum(sg[1] - sg[0] for sg in segs) + lead
     fw, fh = probe(src)
 
     # captions on the output timeline
+    pcm = speech(src, lo - 3, hi + 3)
     allw = json.load(open(os.path.join(work, f"{cid}.words.json")))
-    words = clip_words(allw, segs, speech(src, lo - 3, hi + 3), lo - 3)
+    words = clip_words(allw, segs, pcm, lo - 3, lead)
     ass = os.path.join(work, f"{cid}.ass")
     srt = os.path.join(ROOT, "subtitles", f"{cid}.srt")
     write_subs(words, ass, srt, VID_Y + VID_H - 170, dur)
@@ -274,7 +324,7 @@ def render(clip, src_dir, work, subs_only=False):
     bg = os.path.join(work, f"{cid}.frame.png")
     frame_png(clip, bg)
 
-    vfc, afc = graph(clip, segs, lo, cw, ch, y0, plans, ass, dur)
+    vfc, afc = graph(clip, segs, lo, cw, ch, y0, plans, ass, dur, lead)
     base = ["ffmpeg", "-hide_banner", "-y", "-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", bg,
             "-ss", f"{lo:.3f}", "-t", f"{hi - lo + 0.5:.3f}", "-i", src]
     # pass 1: measure loudness of the edited audio so pass 2 is a linear gain (even level across clips)
@@ -284,7 +334,12 @@ def render(clip, src_dir, work, subs_only=False):
     m = json.loads(p.stderr[p.stderr.rindex("{"):p.stderr.rindex("}") + 1])
     an = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
-    fc = vfc + ";" + afc + f";[ac]{an},afade=t=in:d=0.08,afade=t=out:st={dur - 0.25:.3f}:d=0.25,aresample=48000[aout]"
+    delay = f"adelay=delays={round(lead * 1000)}:all=1," if lead else ""
+    # asetpts re-times the audio from its sample count: after concat, loudnorm passes on frames whose
+    # timestamps bunch up over its 3 s look-ahead, which the AAC encoder wrote as packets of 1 and
+    # 215 samples followed by one of 2.4 s (seeking into the first 3 s then found no audio)
+    fc = vfc + ";" + afc + (f";[ac]{an},{delay}afade=t=in:d=0.08,afade=t=out:st={dur - 0.25:.3f}:d=0.25,"
+                            "aresample=48000,asetpts=N/SR/TB[aout]")
     out = os.path.join(ROOT, "clips", f"{cid}.mp4")
     cmd = base[:2] + ["-v", "error"] + base[2:] + [
         "-filter_complex", fc, "-map", "[out]", "-map", "[aout]", "-t", f"{dur:.3f}",

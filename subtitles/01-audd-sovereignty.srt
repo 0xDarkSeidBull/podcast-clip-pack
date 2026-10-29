@@ -1,147 +1,183 @@
 1
-00:00:00,100 --> 00:00:01,060
-We're on Redbelly for
+00:00:00,040 --> 00:00:00,801
+We're on Redbelly
 
 2
-00:00:01,060 --> 00:00:03,490
-that exact reason.
+00:00:00,801 --> 00:00:01,612
+for that,
 
 3
-00:00:03,880 --> 00:00:04,690
-Well, two reasons,
+00:00:02,423 --> 00:00:03,424
+for that exact reason.
 
 4
-00:00:04,700 --> 00:00:05,030
-you know,
+00:00:03,424 --> 00:00:04,065
+Two, well,
 
 5
-00:00:05,220 --> 00:00:06,460
-I touched on one of
+00:00:04,065 --> 00:00:04,626
+two reasons,
 
 6
-00:00:06,460 --> 00:00:07,100
-them, which is the
+00:00:04,626 --> 00:00:04,956
+you know,
 
 7
-00:00:07,100 --> 00:00:08,050
-sovereignty, right?
+00:00:05,126 --> 00:00:05,647
+I, I mean,
 
 8
-00:00:08,150 --> 00:00:09,930
-When you or I don't
+00:00:05,647 --> 00:00:06,628
+touched on one of them,
 
 9
-00:00:09,930 --> 00:00:12,150
-naturally hold and spend
+00:00:06,628 --> 00:00:07,089
+which is the
 
 10
-00:00:12,150 --> 00:00:14,050
-US dollars in our
+00:00:07,089 --> 00:00:08,040
+sovereignty, right?
 
 11
-00:00:14,050 --> 00:00:15,210
-day-to-day lives and in
+00:00:08,170 --> 00:00:08,540
+When
 
 12
-00:00:15,210 --> 00:00:16,020
-our wallets,
+00:00:08,911 --> 00:00:10,603
+you or I don't naturally
 
 13
-00:00:16,730 --> 00:00:17,930
-we generally tend to
+00:00:10,613 --> 00:00:11,144
+hold
 
 14
-00:00:17,930 --> 00:00:18,570
-operate in our
+00:00:11,474 --> 00:00:13,126
+and spend US dollars
 
 15
-00:00:18,570 --> 00:00:19,310
-Australian dollars,
+00:00:13,517 --> 00:00:15,019
+in our day-to-day lives
 
 16
-00:00:19,310 --> 00:00:21,290
-then why are we pushed
+00:00:15,019 --> 00:00:16,050
+and in our wallets,
 
 17
-00:00:21,290 --> 00:00:22,830
-in the digital asset
+00:00:16,220 --> 00:00:16,831
+et cetera,
 
 18
-00:00:22,830 --> 00:00:25,150
-space of dealing with US
+00:00:17,081 --> 00:00:18,382
+we generally tend to
 
 19
-00:00:25,150 --> 00:00:25,960
-dollars, right?
+00:00:18,382 --> 00:00:19,023
+operate in our
 
 20
-00:00:26,230 --> 00:00:28,170
-However, it all then
+00:00:19,023 --> 00:00:19,704
+Australian dollars,
 
 21
-00:00:28,170 --> 00:00:30,130
-boils down to every time
+00:00:19,704 --> 00:00:20,374
+then why,
 
 22
-00:00:30,130 --> 00:00:31,130
-you're using a US
+00:00:20,644 --> 00:00:21,876
+why are we pushed
 
 23
-00:00:31,130 --> 00:00:32,060
-dollar, that is,
+00:00:22,546 --> 00:00:23,387
+in the digital asset
 
 24
-00:00:32,210 --> 00:00:33,010
-and especially US dollar
+00:00:23,387 --> 00:00:24,338
+space of,
 
 25
-00:00:33,010 --> 00:00:34,250
-stablecoin, it's money
+00:00:24,749 --> 00:00:25,689
+of dealing with US
 
 26
-00:00:34,250 --> 00:00:34,870
-that's not sitting
+00:00:25,689 --> 00:00:26,370
+dollars, right?
 
 27
-00:00:34,870 --> 00:00:35,770
-onshore. It's money
+00:00:26,370 --> 00:00:27,661
+However, it all
 
 28
-00:00:35,770 --> 00:00:37,190
-that's not backing your
+00:00:27,971 --> 00:00:29,121
+then boils down to
 
 29
-00:00:37,190 --> 00:00:38,050
-asset onshore.
+00:00:29,732 --> 00:00:30,752
+every time you're using
 
 30
-00:00:38,050 --> 00:00:39,730
-And so supporting the
+00:00:30,752 --> 00:00:31,552
+a US dollar,
 
 31
-00:00:39,730 --> 00:00:41,130
-Australian ecosystem by
+00:00:31,552 --> 00:00:32,022
+that is,
 
 32
-00:00:41,130 --> 00:00:42,190
-using a blockchain like
+00:00:32,133 --> 00:00:33,073
+and especially US dollar
 
 33
-00:00:42,190 --> 00:00:43,850
-Redbelly that is an
+00:00:33,073 --> 00:00:34,314
+stablecoin, it's money
 
 34
-00:00:43,850 --> 00:00:45,550
-Australian-built and
+00:00:34,314 --> 00:00:34,954
+that's not sitting
 
 35
-00:00:45,550 --> 00:00:46,330
-Australian-operated
+00:00:34,954 --> 00:00:35,814
+onshore. It's money
 
 36
-00:00:46,330 --> 00:00:48,190
-blockchain is pretty
+00:00:35,814 --> 00:00:37,295
+that's not backing your
 
 37
-00:00:48,190 --> 00:00:48,680
-important.
+00:00:37,295 --> 00:00:38,125
+asset onshore.
+
+38
+00:00:38,395 --> 00:00:39,716
+And so supporting the
+
+39
+00:00:39,716 --> 00:00:41,257
+Australian ecosystem by
+
+40
+00:00:41,257 --> 00:00:42,257
+using a blockchain like
+
+41
+00:00:42,257 --> 00:00:43,688
+Redbelly that is
+
+42
+00:00:43,718 --> 00:00:44,518
+an Australian,
+
+43
+00:00:44,518 --> 00:00:45,579
+an Australian-built and
+
+44
+00:00:45,579 --> 00:00:46,479
+Australian-operated
+
+45
+00:00:46,479 --> 00:00:47,049
+blockchain
+
+46
+00:00:47,900 --> 00:00:48,730
+is pretty important.

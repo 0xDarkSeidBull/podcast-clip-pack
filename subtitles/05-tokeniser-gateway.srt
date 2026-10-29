@@ -1,195 +1,211 @@
 1
-00:00:00,200 --> 00:00:01,840
+00:00:00,440 --> 00:00:01,672
 We've always known that
 
 2
-00:00:01,840 --> 00:00:03,120
+00:00:02,323 --> 00:00:03,063
 tokenisation is the
 
 3
-00:00:03,120 --> 00:00:03,530
+00:00:03,063 --> 00:00:03,554
 future.
 
 4
-00:00:04,200 --> 00:00:04,560
+00:00:04,025 --> 00:00:04,605
 Real-world asset
 
 5
-00:00:04,560 --> 00:00:05,580
+00:00:04,605 --> 00:00:05,586
 tokenisation has been a
 
 6
-00:00:05,580 --> 00:00:06,440
+00:00:05,586 --> 00:00:06,487
 very hot topic.
 
 7
-00:00:06,440 --> 00:00:07,160
+00:00:06,487 --> 00:00:07,148
 It's been something a
 
 8
-00:00:07,160 --> 00:00:08,080
+00:00:07,148 --> 00:00:08,069
 lot of people want to
 
 9
-00:00:08,080 --> 00:00:09,180
-do, but the question has
+00:00:08,069 --> 00:00:08,319
+do,
 
 10
-00:00:09,180 --> 00:00:09,630
-always been,
+00:00:08,650 --> 00:00:09,170
+but the question has
 
 11
-00:00:09,680 --> 00:00:10,550
-how do we do this?
+00:00:09,170 --> 00:00:09,611
+always been,
 
 12
-00:00:10,660 --> 00:00:12,300
-And that's very much why
+00:00:09,611 --> 00:00:10,472
+how do we do this?
 
 13
-00:00:12,300 --> 00:00:13,370
-Tokeniser exists.
+00:00:10,472 --> 00:00:11,713
+Yeah, and that's very
 
 14
-00:00:13,380 --> 00:00:14,140
-It's meant to be that
+00:00:11,713 --> 00:00:12,955
+much why Tokeniser
 
 15
-00:00:14,140 --> 00:00:15,720
-gateway, that ability
+00:00:12,955 --> 00:00:13,936
+exists. It's meant to be
 
 16
-00:00:15,720 --> 00:00:17,580
-for those issuers.
+00:00:13,936 --> 00:00:14,817
+that gateway,
 
 17
-00:00:17,580 --> 00:00:18,490
-We want to give them
+00:00:14,817 --> 00:00:16,959
+that ability for those
 
 18
-00:00:18,490 --> 00:00:19,190
-a platform that's
+00:00:16,959 --> 00:00:17,630
+issuers.
 
 19
-00:00:19,190 --> 00:00:20,550
-familiar, easy to use,
+00:00:17,820 --> 00:00:18,520
+We want to give them
 
 20
-00:00:20,550 --> 00:00:21,470
-that very much
+00:00:18,520 --> 00:00:19,141
+a platform that's
 
 21
-00:00:21,470 --> 00:00:22,970
-traditional in this
+00:00:19,141 --> 00:00:20,582
+familiar, easy to use,
 
 22
-00:00:22,970 --> 00:00:24,590
-sense, Web 2.0 style
+00:00:20,582 --> 00:00:21,502
+that very much
 
 23
-00:00:24,590 --> 00:00:26,650
-interface, but at the
+00:00:21,502 --> 00:00:22,312
+traditional
 
 24
-00:00:26,650 --> 00:00:28,130
-same time is powered by
+00:00:22,663 --> 00:00:23,343
+in this sense,
 
 25
-00:00:28,130 --> 00:00:29,410
-and enables them to
+00:00:23,343 --> 00:00:25,734
+Web 2.0 style interface,
 
 26
-00:00:29,410 --> 00:00:31,090
-essentially tokenise
+00:00:26,024 --> 00:00:27,285
+but at the same time
 
 27
-00:00:31,090 --> 00:00:32,010
-their assets.
+00:00:27,285 --> 00:00:28,266
+is powered by and
 
 28
-00:00:32,010 --> 00:00:33,030
-So it makes it easy
+00:00:28,266 --> 00:00:29,476
+enables them to
 
 29
-00:00:33,030 --> 00:00:34,270
-for the issuers to
+00:00:29,826 --> 00:00:31,347
+essentially tokenise to
 
 30
-00:00:34,270 --> 00:00:35,910
-essentially get onto the
+00:00:31,347 --> 00:00:32,148
+their assets.
 
 31
-00:00:35,910 --> 00:00:36,630
-Redbelly Network.
+00:00:32,148 --> 00:00:33,108
+So it makes it easy
 
 32
-00:00:36,630 --> 00:00:38,030
-It makes it easy for
+00:00:33,108 --> 00:00:34,359
+for the issuers to
 
 33
-00:00:38,030 --> 00:00:39,460
-their shareholders,
+00:00:34,369 --> 00:00:35,870
+essentially get onto the
 
 34
-00:00:39,690 --> 00:00:40,400
-note holders,
-
-35
-00:00:40,670 --> 00:00:41,300
-unit holders,
-
-36
-00:00:41,310 --> 00:00:42,270
-whoever has invested in
-
-37
-00:00:42,270 --> 00:00:43,530
-these issuers to get
-
-38
-00:00:43,530 --> 00:00:44,150
-onto the Redbelly
-
-39
-00:00:44,150 --> 00:00:45,110
-Network and makes it
-
-40
-00:00:45,110 --> 00:00:46,770
-easy for those tokens
-
-41
-00:00:46,770 --> 00:00:47,830
-that have been minted
-
-42
-00:00:47,830 --> 00:00:49,070
-and issued via the
-
-43
-00:00:49,070 --> 00:00:50,330
-Tokeniser platform to be
-
-44
-00:00:50,330 --> 00:00:51,470
-transacted on the
-
-45
-00:00:51,470 --> 00:00:52,260
+00:00:35,870 --> 00:00:36,730
 Redbelly Network.
 
+35
+00:00:36,730 --> 00:00:37,961
+It makes it easy for
+
+36
+00:00:38,051 --> 00:00:38,401
+their
+
+37
+00:00:38,731 --> 00:00:39,852
+shareholders, note
+
+38
+00:00:39,852 --> 00:00:41,212
+holders, unit holders,
+
+39
+00:00:41,212 --> 00:00:42,253
+whoever has invested in
+
+40
+00:00:42,253 --> 00:00:43,574
+these issuers to get
+
+41
+00:00:43,574 --> 00:00:44,194
+onto the Redbelly
+
+42
+00:00:44,194 --> 00:00:45,134
+Network and makes it
+
+43
+00:00:45,134 --> 00:00:46,815
+easy for those tokens
+
+44
+00:00:46,815 --> 00:00:47,826
+that have been minted
+
+45
+00:00:47,956 --> 00:00:49,016
+and issued via the
+
 46
-00:00:52,290 --> 00:00:53,730
-I think that's something
+00:00:49,016 --> 00:00:50,297
+Tokeniser platform to be
 
 47
-00:00:53,730 --> 00:00:54,270
-which is going to be
+00:00:50,297 --> 00:00:51,478
+transacted on the
 
 48
-00:00:54,270 --> 00:00:55,790
-a great unlock for the
+00:00:51,478 --> 00:00:52,298
+Redbelly Network.
 
 49
-00:00:55,790 --> 00:00:56,160
+00:00:52,298 --> 00:00:52,668
+I think
+
+50
+00:00:53,038 --> 00:00:53,959
+that's something which
+
+51
+00:00:53,959 --> 00:00:54,399
+is going to be a
+
+52
+00:00:54,399 --> 00:00:55,800
+great unlock for the
+
+53
+00:00:55,800 --> 00:00:56,160
 network.

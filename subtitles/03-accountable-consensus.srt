@@ -1,207 +1,223 @@
 1
-00:00:00,000 --> 00:00:00,227
+00:00:00,040 --> 00:00:00,260
 You know,
 
 2
-00:00:00,227 --> 00:00:01,340
+00:00:00,260 --> 00:00:01,422
 the consensus is central
 
 3
-00:00:01,340 --> 00:00:01,827
+00:00:01,422 --> 00:00:01,983
 to blockchain,
 
 4
-00:00:01,827 --> 00:00:03,000
+00:00:01,983 --> 00:00:03,024
 right? So making sure
 
 5
-00:00:03,000 --> 00:00:03,540
+00:00:03,024 --> 00:00:03,565
 that, you know,
 
 6
-00:00:03,540 --> 00:00:04,320
+00:00:03,565 --> 00:00:04,386
 there's a unique block
 
 7
-00:00:04,320 --> 00:00:05,200
+00:00:04,386 --> 00:00:05,237
 at the given index
 
 8
-00:00:05,200 --> 00:00:06,860
+00:00:05,788 --> 00:00:06,909
 prevents you from having
 
 9
-00:00:06,860 --> 00:00:07,590
+00:00:06,909 --> 00:00:07,630
 double-spending.
 
 10
-00:00:07,690 --> 00:00:09,590
-What we did back in
+00:00:07,630 --> 00:00:08,100
+What we
 
 11
-00:00:09,590 --> 00:00:13,450
-2019 was to define an
+00:00:08,570 --> 00:00:10,491
+did back in 2019 was
 
 12
-00:00:13,450 --> 00:00:14,370
-accountable consensus
+00:00:10,491 --> 00:00:11,221
+to define
 
 13
-00:00:14,370 --> 00:00:15,250
-version, which means
+00:00:13,352 --> 00:00:14,493
+an accountable consensus
 
 14
-00:00:15,250 --> 00:00:16,070
-that, okay,
+00:00:14,493 --> 00:00:15,293
+version, which means
 
 15
-00:00:16,070 --> 00:00:16,890
-if you cannot solve
+00:00:15,293 --> 00:00:16,113
+that, okay,
 
 16
-00:00:16,890 --> 00:00:17,930
-consensus, which means
+00:00:16,113 --> 00:00:16,914
+if you cannot solve
 
 17
-00:00:17,930 --> 00:00:19,250
-that you probably have
+00:00:16,914 --> 00:00:18,014
+consensus, which means
 
 18
-00:00:19,250 --> 00:00:20,830
-hackers among the
+00:00:18,014 --> 00:00:19,335
+that you probably have
 
 19
-00:00:20,830 --> 00:00:21,470
-participants that are
+00:00:19,335 --> 00:00:20,025
+hackers
 
 20
-00:00:21,470 --> 00:00:22,640
-trying to double-spend,
+00:00:20,495 --> 00:00:21,275
+among the participants
 
 21
-00:00:22,730 --> 00:00:23,950
-and that's how you
+00:00:21,275 --> 00:00:21,916
+that are trying to
 
 22
-00:00:23,950 --> 00:00:24,670
-couldn't solve
+00:00:21,916 --> 00:00:22,896
+double-spend, yeah,
 
 23
-00:00:24,670 --> 00:00:25,460
-consensus,
+00:00:22,896 --> 00:00:23,706
+and that's how you,
 
 24
-00:00:25,930 --> 00:00:27,430
-then what you can do
+00:00:24,037 --> 00:00:24,717
+you couldn't solve
 
 25
-00:00:27,430 --> 00:00:29,150
-if you truly solve the
+00:00:24,717 --> 00:00:25,467
+consensus,
 
 26
-00:00:29,150 --> 00:00:30,030
-accountable consensus
+00:00:26,438 --> 00:00:27,388
+then what you can do
 
 27
-00:00:30,030 --> 00:00:31,030
-problem is that you can
+00:00:28,078 --> 00:00:29,139
+if you truly solve the
 
 28
-00:00:31,030 --> 00:00:32,810
-identify who they are.
+00:00:29,139 --> 00:00:30,079
+accountable consensus
 
 29
-00:00:32,850 --> 00:00:34,830
-And so suddenly you make
+00:00:30,079 --> 00:00:31,099
+problem is that you can
 
 30
-00:00:34,830 --> 00:00:35,770
-everyone accountable in
+00:00:31,099 --> 00:00:32,410
+identify who they are.
 
 31
-00:00:35,770 --> 00:00:36,440
-the sense that,
+00:00:32,720 --> 00:00:33,170
+And so
 
 32
-00:00:36,490 --> 00:00:37,850
-okay, you can cheat if
+00:00:33,681 --> 00:00:34,272
+suddenly
 
 33
-00:00:37,850 --> 00:00:38,350
-you want,
+00:00:34,583 --> 00:00:35,223
+you make everyone
 
 34
-00:00:38,350 --> 00:00:39,030
-you can try to
+00:00:35,223 --> 00:00:36,104
+accountable in the sense
 
 35
-00:00:39,030 --> 00:00:39,580
-double-spend,
+00:00:36,104 --> 00:00:36,695
+that, okay,
 
 36
-00:00:39,910 --> 00:00:40,830
-but you're going to get
+00:00:36,906 --> 00:00:37,967
+you can cheat if you
 
 37
-00:00:40,830 --> 00:00:42,310
-caught. And there is no
+00:00:37,967 --> 00:00:38,988
+want, you can try to
 
 38
-00:00:42,310 --> 00:00:43,100
-way around.
+00:00:38,988 --> 00:00:39,639
+double-spend,
 
 39
-00:00:43,130 --> 00:00:43,730
-There's going to be an
+00:00:40,310 --> 00:00:40,891
+but you're going to get
 
 40
-00:00:43,730 --> 00:00:44,810
-undeniable proof of
+00:00:40,891 --> 00:00:41,281
+caught.
 
 41
-00:00:44,810 --> 00:00:45,430
-fraud that will be
+00:00:41,752 --> 00:00:42,573
+And there is no way
 
 42
-00:00:45,430 --> 00:00:46,550
-generated and everyone
+00:00:42,573 --> 00:00:43,514
+around. There's going to
 
 43
-00:00:46,550 --> 00:00:47,390
-will see that you're
+00:00:43,514 --> 00:00:44,696
+be an undeniable proof
 
 44
-00:00:47,390 --> 00:00:48,000
-responsible.
+00:00:44,696 --> 00:00:45,417
+of fraud that will be
 
 45
-00:00:48,070 --> 00:00:49,010
-If you know that,
+00:00:45,417 --> 00:00:46,658
+generated and everyone
 
 46
-00:00:49,010 --> 00:00:49,630
-you're going to think
+00:00:46,658 --> 00:00:47,459
+will see that you're
 
 47
-00:00:49,630 --> 00:00:51,150
-twice before cheating
+00:00:47,459 --> 00:00:48,090
+responsible.
 
 48
-00:00:51,150 --> 00:00:52,370
-because there is a risk
+00:00:48,261 --> 00:00:49,052
+If you know that,
 
 49
-00:00:52,370 --> 00:00:53,650
-that you cannot even
+00:00:49,062 --> 00:00:49,754
+you're going to think
 
 50
-00:00:53,650 --> 00:00:54,990
-double-spend, but for
+00:00:49,844 --> 00:00:51,669
+twice before cheating
 
 51
-00:00:54,990 --> 00:00:55,710
-sure you're going to get
+00:00:51,669 --> 00:00:52,411
+because there is a risk
 
 52
-00:00:55,710 --> 00:00:56,140
-caught.
+00:00:52,411 --> 00:00:52,701
+that
+
+53
+00:00:53,072 --> 00:00:53,654
+you cannot even
+
+54
+00:00:53,654 --> 00:00:54,545
+double-spend, but
+
+55
+00:00:54,877 --> 00:00:55,578
+for sure you're going to
+
+56
+00:00:55,578 --> 00:00:56,109
+get caught.

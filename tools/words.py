@@ -60,9 +60,15 @@ def apply_fixes(words, fixes):
     """Phrase-level corrections checked against the audio: {"from": "a b", "to": "c d"}.
 
     An optional "s" gives the time the phrase actually starts in the audio, for the few
-    words whose Whisper timestamp lands on the wrong side of an edit point."""
+    words whose Whisper timestamp lands on the wrong side of an edit point. A "|" in "to"
+    starts a new caption line at the next word ("| for that, for that exact")."""
     for fx in fixes:
-        src, dst = fx["from"].split(), fx["to"].split()
+        src, dst, breaks = fx["from"].split(), [], set()
+        for t in fx["to"].split():
+            if t == "|":
+                breaks.add(len(dst))
+            else:
+                dst.append(t)
         i = 0
         while i <= len(words) - len(src):
             if [w["w"] for w in words[i:i + len(src)]] == src:
@@ -71,6 +77,8 @@ def apply_fixes(words, fixes):
                 new = [{"s": round(s + k * step, 3), "e": round(s + (k + 1) * step, 3), "w": t} for k, t in enumerate(dst)]
                 if len(dst) == len(src) and "s" not in fx:
                     new = [dict(words[i + k], w=t) for k, t in enumerate(dst)]
+                for k in breaks:
+                    new[k]["br"] = True
                 words[i:i + len(src)] = new
                 i += len(dst)
             else:

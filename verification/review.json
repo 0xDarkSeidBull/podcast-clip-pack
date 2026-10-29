@@ -1,22 +1,42 @@
 {
- "note": "Every difference the automated checks list was checked against the official episode file. For each subtitle difference the same moment of the episode audio was transcribed again in short focused windows with two further models (Whisper large-v3 and small.en, beam search and greedy) and the waveform was inspected at 10 ms resolution; a word is shown in the subtitles when the focused passes agree it is spoken. Edit points were placed by reading the waveform at 10 ms resolution. The contact sheets were inspected frame by frame.",
+ "note": "Verdicts on every difference the automated checks list, written while preparing the clips. Each subtitle difference was re-checked by transcribing that moment of the clip again in short focused windows with further models (Whisper large-v3, medium.en and small.en, and the wav2vec 2.0 speech model) and by reading the waveform; edit points were placed from the waveform and checked by transcribing each side of the edit on its own. A person's own watch-through of the finished clips is recorded separately under Human review.",
  "clips": {
   "01-audd-sovereignty": {
    "subtitle_diffs": [
     {
-     "srt": "",
-     "asr": "Right.",
-     "verdict": "Not spoken twice. Focused large-v3 and small.en passes over 43:46.5-43:49.8 of the episode hear a single \"right?\"; the second \"Right.\" only appears in the full-clip pass, at the cut."
+     "srt": "for that",
+     "asr": "",
+     "verdict": "Said twice: \"We're on Redbelly for that, um, for that exact reason.\" wav2vec 2.0 hears \"for that\" at 0.8 s and again at 2.4 s, and small.en, with the opening transcribed on its own, hears \"for that for that exact reason\"; large-v3 hears it once. The restart is shown, like other audible false starts."
     },
     {
-     "srt": "and",
-     "asr": "an",
-     "verdict": "\"and\" spoken unstressed (\"an' especially\", \"an' Australian-operated\"); the sentence needs \"and\"."
+     "srt": "Two,",
+     "asr": "",
+     "verdict": "Spoken: \"for that exact reason. Two, well, two reasons\". With 3.0-5.8 s of the clip transcribed on its own, all four models (large-v3, medium.en, small.en and wav2vec 2.0) hear \"two\" before \"well\" as well as after it; the full-clip pass drops the first."
+    },
+    {
+     "srt": "I mean,",
+     "asr": "",
+     "verdict": "Spoken: \"you know, I, I mean, touched on one of them\". With that moment transcribed on its own, medium.en and small.en hear \"I mean\" and wav2vec 2.0 hears \"I, I mean\"; scored by forced alignment against the audio, \"I, I mean\" fits better than a single \"I\". large-v3 hears \"I\" once."
+    },
+    {
+     "srt": "why",
+     "asr": "",
+     "verdict": "Said twice: \"then why, uh, why are we pushed\". wav2vec 2.0 hears \"why\" at 19.97 s and again at 20.63 s, and large-v3 and small.en, with that moment transcribed on its own, also hear it twice; the full-clip pass hears it once."
+    },
+    {
+     "srt": "of,",
+     "asr": "",
+     "verdict": "Said twice: \"space of, of dealing with US dollars\". With that moment transcribed on its own, wav2vec 2.0 hears \"of\" at 24.1 s and again at 24.8 s and small.en hears \"of, of\"; large-v3 and medium.en hear it once."
     },
     {
      "srt": "",
-     "asr": "Australian",
-     "verdict": "The speaker restarts the word (\"an Australian, Australian-built\"); the repeated word is left out, as for other false starts."
+     "asr": "a",
+     "verdict": "Not spoken. With 31.3-34.0 s of the clip transcribed on its own, large-v3 and medium.en hear \"and especially US dollar stablecoin\" with no \"a\", and so does wav2vec 2.0; only small.en, in one of two passes, and the full-clip pass hear an \"a\" before \"US\"."
+    },
+    {
+     "srt": "an Australian-built",
+     "asr": "",
+     "verdict": "A restart: Effie says \"an Australian\" and starts again, \"an Australian-built\". With 43.6-46.0 s transcribed on its own, all four models hear \"Australian\" twice (Whisper reads the sound joining them as \"now\"); scored by forced alignment with wav2vec 2.0, \"an Australian, an Australian-built\" fits the audio best, better than \"now\" or \"Australian-owned\". The full-clip pass hears the word once."
     }
    ],
    "edit_points": [
@@ -31,19 +51,19 @@
   "02-tokenised-workflows": {
    "subtitle_diffs": [
     {
-     "srt": "it,",
-     "asr": "the",
-     "verdict": "\"it\" is spoken: the focused large-v3 pass over 5:43-5:48 and medium.en hear \"workflows around it, right?\" (small.en hears \"around the area\")."
+     "srt": "",
+     "asr": "Yeah,",
+     "verdict": "Not spoken. The clip opens on a 0.4 s silent beat, and the only sound before \"There\" is the first 0.1 s of the range, where \"I think\" runs into \"There\" (see the edit point at 05:40.2). With the opening transcribed on its own, large-v3 hears \"There is limited use in the tokenised asset\" with no \"yeah\"; medium.en and small.en read that sound as \"If\" in a short window, and small.en as \"Yeah\" in a longer one."
+    },
+    {
+     "srt": "the",
+     "asr": "",
+     "verdict": "Spoken: with 0-3.4 s of the clip transcribed on its own, large-v3 and medium.en hear \"use in the tokenised asset\" in both windows, and wav2vec 2.0 hears \"the\" at 2.2 s; the full-clip pass drops it."
     },
     {
      "srt": "cases",
      "asr": "case",
      "verdict": "\"cases\" is spoken: focused small.en and medium.en hear \"use cases\" (focused large-v3 hears \"use case\"); the speaker refers to several use cases."
-    },
-    {
-     "srt": "",
-     "asr": "yeah",
-     "verdict": "Not spoken. Focused large-v3 and small.en passes over 6:01-6:06 hear no \"yeah\" in the pause between \"token?\" and \"What's the value\"."
     }
    ],
    "edit_points": [
@@ -53,7 +73,7 @@
     }
    ],
    "other_text": [],
-   "frames": "Vincent Gramoli is in frame in every sheet frame (the first 0.2 s holds his first frame while the episode shows the host). From 30 s the episode's wide shot shows the official Redbelly Insights studio sign. Name card \"Founder, Redbelly Network\". No credits, handles, URLs or watermarks."
+   "frames": "Vincent Gramoli is in frame in every sheet frame (the clip opens on a 0.4 s silent beat on his first frame, held for 0.2 s more while the episode is still on the host). From 30 s the episode's wide shot shows the official Redbelly Insights studio sign. Name card \"Founder, Redbelly Network\". No credits, handles, URLs or watermarks."
   },
   "03-accountable-consensus": {
    "subtitle_diffs": [
@@ -64,18 +84,13 @@
     },
     {
      "srt": "",
-     "asr": "yeah",
-     "verdict": "Not spoken. Focused large-v3 and small.en passes over 12:28-12:35 hear \"trying to double-spend, and that's how\" with no \"yeah\"."
-    },
-    {
-     "srt": "",
-     "asr": "you",
-     "verdict": "The speaker repeats \"you\" (\"how you, you couldn't solve consensus\", as small.en also hears it); the repeated word is left out."
-    },
-    {
-     "srt": "",
      "asr": "right",
      "verdict": "Not spoken. Focused large-v3 and small.en passes over 13:02-13:08 hear \"before cheating because there is a risk\" with no \"right\"."
+    },
+    {
+     "srt": "",
+     "asr": "if you",
+     "verdict": "Said once. With the start of the range transcribed on its own (47.9-49.8 s and 47.3-50.2 s), large-v3, medium.en, small.en and wav2vec 2.0 all hear a single \"If you know that\", and forced alignment of both texts against the audio strongly favours the single one. The doubled \"if you\" in the full-clip pass echoes the \"if you, if you're\" that the cut at 13:02.2 leaves out."
     }
    ],
    "edit_points": [
@@ -90,23 +105,14 @@
    ],
    "other_text": [
     {
-     "pattern": "(?i)(s?[ao]me?|sor)[_.—-]?",
-     "verdict": "The brand name \"some_\" printed on the speaker's polo shirt, part of the episode footage (OCR also reads parts of it, \"Sor\", \"som\", \"ome\"). Not a credit."
-    },
-    {
-     "text": "thy",
-     "verdict": "OCR noise on the speaker's hair at 00:27 (checked in the frame: there is no text there)."
+     "pattern": "(?i)(s?[ao]me?|sor|sony)[_.—-]?",
+     "verdict": "The brand name \"some_\" printed on the speaker's polo shirt, part of the episode footage (OCR also reads parts of it, \"Sor\", \"som\", \"ome\", or misreads it as \"sony\"). Not a credit."
     }
    ],
    "frames": "Vincent Gramoli is in frame in every sheet frame; the last ranges use the episode's wide shot with the official Redbelly Insights studio sign. Name card \"Founder, Redbelly Network\". The only other text is the brand print on his shirt. No credits, handles, URLs or watermarks."
   },
   "04-ai-agent-accountability": {
    "subtitle_diffs": [
-    {
-     "srt": "",
-     "asr": "So,",
-     "verdict": "False start: \"right? So, and I think it's very important\". The subtitles keep \"right?\" and leave out the abandoned \"So,\"."
-    },
     {
      "srt": "Redbelly",
      "asr": "RedBilly",
@@ -118,9 +124,34 @@
      "verdict": "\"he\" is spoken: the focused large-v3 pass over 17:36-17:41 and medium.en hear \"he acts on the behalf\" (small.en hears \"it\")."
     },
     {
+     "srt": "a this, this,",
+     "asr": "",
+     "verdict": "Spoken: \"there is a this, this, this person or institutions\". With 32.0-35.4 s transcribed on its own, large-v3, medium.en and small.en all hear \"this\" three times, and wav2vec 2.0 hears \"a this this this person\"; scored by forced alignment, that text fits the audio far better than a single \"this\". The \"a\" was also heard by the person reviewing the clip (large-v3 reads it as \"um\")."
+    },
+    {
      "srt": "institutions",
      "asr": "institution",
      "verdict": "\"institutions\" is spoken: focused large-v3 and small.en passes over 17:44-17:49 both hear \"person or institutions that act\"."
+    },
+    {
+     "srt": "it",
+     "asr": "",
+     "verdict": "Spoken: \"that acts, that it should be responsible\". wav2vec 2.0 hears \"that it should\" in every pass, and medium.en and small.en hear a short word there too (\"that is should\") in a focused window; scored by forced alignment with wav2vec 2.0, \"it\" fits better than \"is\" or nothing. large-v3 hears neither."
+    },
+    {
+     "srt": "again,",
+     "asr": "",
+     "verdict": "Spoken: \"And again, by having Redbelly Network\". With 43.9-45.6 s transcribed on its own, medium.en hears \"and again by having\", wav2vec 2.0 \"and again\" and small.en \"and agree\"; large-v3 reads it as \"Agreed\" in one window and drops it in the full-clip pass. Scored by forced alignment, \"And again\" fits the audio far better than \"And\" alone."
+    },
+    {
+     "srt": "this",
+     "asr": "these",
+     "verdict": "\"this\" is spoken: with 47.8-50.0 s transcribed on its own, large-v3, medium.en, small.en and wav2vec 2.0 all hear \"to this kind of, you know\", and forced alignment with wav2vec 2.0 also favours \"this\"."
+    },
+    {
+     "srt": "yeah,",
+     "asr": "",
+     "verdict": "Spoken by Vincent: \"who does something wrong, yeah, will have a responsible party\". With 54.8-58.6 s transcribed on its own, wav2vec 2.0, medium.en and small.en hear \"yeah\" in both windows and large-v3 in one, and his lips move on it in the video."
     }
    ],
    "edit_points": [
@@ -129,25 +160,20 @@
      "verdict": "Clean: the edit sits in a 0.1 s pause (-59 dB) before \"And\". Transcribed on its own without the voice-activity filter, large-v3, small.en and medium.en all hear the range start \"And by having Redbelly Network\"; with the filter, large-v3 reads the first word as \"I\"."
     }
    ],
-   "other_text": [
-    {
-     "pattern": "(?i)associating.?jan",
-     "verdict": "OCR fusing the burned-in caption words \"associating an\"."
-    }
-   ],
+   "other_text": [],
    "frames": "Vincent Gramoli is in frame in every sheet frame, across the episode's close-up and wide shots (the wide shots show the official Redbelly Insights studio sign). Name card \"Founder, Redbelly Network\". No credits, handles, URLs or watermarks."
   },
   "05-tokeniser-gateway": {
    "subtitle_diffs": [
     {
-     "srt": "And",
+     "srt": "Yeah, and",
      "asr": "",
-     "verdict": "\"And\" is spoken: focused small.en hears \"And that's very much why\"; focused large-v3 hears \"yeah and that's\"."
+     "verdict": "Spoken by Matt Mills: \"how do we do this? Yeah, and that's very much why Tokeniser exists\". With 9.6-11.6 s transcribed on its own, large-v3, medium.en, small.en and wav2vec 2.0 all hear \"yeah, and\", and his lips move on it in the video; the full-clip pass drops both words."
     },
     {
-     "srt": "",
-     "asr": "them",
-     "verdict": "Said once. Focused large-v3 and small.en passes over 7:43-7:48 hear a single \"enables them to\"."
+     "srt": "to",
+     "asr": "",
+     "verdict": "Spoken: \"essentially tokenise to their assets\". With 29.6-32.2 s and 28.0-32.6 s transcribed on their own, large-v3, medium.en, small.en and wav2vec 2.0 all hear \"tokenise to their assets\", and forced alignment of both texts against the audio favours it; the full-clip pass drops it."
     },
     {
      "srt": "and",
@@ -158,8 +184,8 @@
    "edit_points": [],
    "other_text": [
     {
-     "pattern": "(?i)familiar.?easy,?|that.?very|senses?|r?assets\\.?",
-     "verdict": "OCR fusing or misreading burned-in caption words (\"familiar, easy\", \"that very\", \"sense,\", \"their assets\")."
+     "pattern": "(?i)familiar.?easy,?|that.?very|senses?|r?assets\\.?|unif",
+     "verdict": "OCR fusing or misreading burned-in caption words (\"familiar, easy\", \"that very\", \"sense,\", \"their assets\", \"unit\" read as \"unif\")."
     }
    ],
    "frames": "Matt Mills is in frame in every sheet frame. Name card \"Chief Customer Officer, Tokeniser\". No credits, handles, URLs or watermarks."
@@ -167,9 +193,9 @@
   "06-acacia-instant-subscription": {
    "subtitle_diffs": [
     {
-     "srt": "",
-     "asr": "to",
-     "verdict": "False start: an unfinished word between \"show\" and \"via Tokeniser\" (heard as \"to\" or \"two\"); left out."
+     "srt": "they could,",
+     "asr": "",
+     "verdict": "Spoken: a restart, \"what that meant was they could, the investor could have AUDM stablecoin\". With 25.6-28.4 s transcribed on its own, large-v3, small.en and wav2vec 2.0 hear \"they could\" (medium.en reads it as \"that\"), and forced alignment of both texts against the audio strongly favours it; the full-clip pass drops it."
     },
     {
      "srt": "",
@@ -178,12 +204,7 @@
     }
    ],
    "edit_points": [],
-   "other_text": [
-    {
-     "pattern": "(?i)i?see",
-     "verdict": "OCR fusing the burned-in caption words \"it, they could\" / \"see\"."
-    }
-   ],
+   "other_text": [],
    "frames": "Matt Mills is in frame in every sheet frame. Name card \"Chief Customer Officer, Tokeniser\". No credits, handles, URLs or watermarks."
   }
  }
