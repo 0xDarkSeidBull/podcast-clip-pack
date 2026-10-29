@@ -1,0 +1,100 @@
+{
+ "reviewer": "0xDarkSeidBull",
+ "how": "Each clip was watched and listened to in full at normal speed by a person, after the automated checks had passed, comparing what is said with the burned-in captions and the SRT. Round 1 covered every clip. Round 2 re-checked every clip, with a list of the spots changed since round 1: the timing of the highlighted word, the words added under the verbatim rule, and the first seconds of audio.",
+ "rounds": [
+  {
+   "round": 1,
+   "date": "2026-10-29",
+   "result": "6 findings in 4 clips (clips 3 and 5 passed)",
+   "findings": [
+    {
+     "clip": "01-audd-sovereignty",
+     "at": "00:16",
+     "found": "Jerky jump cut, with a lone \"we\" after it",
+     "fix": "Cut moved into the pause before \"et cetera\"; in round 2 the reviewer re-cut it by hand (see round 2)"
+    },
+    {
+     "clip": "01-audd-sovereignty",
+     "at": "00:47",
+     "found": "\"is\" lit up while Effie pauses on \"blockchain\", before she says it",
+     "fix": "Word timing by forced alignment of the subtitle text to the audio; \"is\" now lights up when it is said, after the pause"
+    },
+    {
+     "clip": "02-tokenised-workflows",
+     "at": "00:00",
+     "found": "\"There is\" starts the moment the video starts",
+     "fix": "0.4 s silent beat on the speaker's first frame before \"There is limited use\""
+    },
+    {
+     "clip": "04-ai-agent-accountability",
+     "at": "00:15-00:16",
+     "found": "Subtitle \"right? And I think\"; the speaker says \"right? So I think\"",
+     "fix": "\"right? So, and I think\": the reviewer's \"So\", plus a short \"and\" that four models hear"
+    },
+    {
+     "clip": "04-ai-agent-accountability",
+     "at": "00:32",
+     "found": "\"a\" missing in \"there is a this\"",
+     "fix": "\"there is a this, this, this person\" (\"this\" is said three times)"
+    },
+    {
+     "clip": "06-acacia-instant-subscription",
+     "at": "00:04-00:05",
+     "found": "\"to\" missing in \"we could show to via Tokeniser\"",
+     "fix": "Added"
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "date": "2026-10-29",
+   "result": "PASS, all six clips",
+   "findings": [
+    {
+     "clip": "01-audd-sovereignty",
+     "at": "00:15-00:16",
+     "found": "The reviewer re-cut this edit by hand (CapCut), joining \"and in our wallets,\" directly to \"we generally tend to\" and dropping \"et cetera\"",
+     "fix": "Ranges 2 and 3 updated to the new cut (43:20.8-43:28.8, 43:40.5-43:49.8). The reviewer's file was HEVC, so it was transcoded to H.264 (every frame at 49.9 dB PSNR or better against the reviewer's file, same audio), and the SRT was re-timed to the new cut after the watch"
+    }
+   ]
+  }
+ ],
+ "clips": {
+  "01-audd-sovereignty": {
+   "result": "PASS",
+   "date": "2026-10-29",
+   "sha256": "d386127d9f4090f1008763dace071029b1c64d1a0587b52c48869c00dcd8b1eb",
+   "srt_sha256": "4d354e4475978a6429d97e49e27d4e77e957e3c24da1cd705adb2769dd90762b"
+  },
+  "02-tokenised-workflows": {
+   "result": "PASS",
+   "date": "2026-10-29",
+   "sha256": "9a590741dbaa65a11515764a50591bba108f813ca35186c3760ed7c3ffa01a7c",
+   "srt_sha256": "886a117f417554314c660e5bdc165eef20d504133ab1a6e476014182cd282198"
+  },
+  "03-accountable-consensus": {
+   "result": "PASS",
+   "date": "2026-10-29",
+   "sha256": "5052bd9d952cce2b7f4dac812d05ddd062dda5cdd583c820f2874b641ea3bd42",
+   "srt_sha256": "00c9197265a46a6aac618aee351494dca136e28fcd2798652c4220e6d3c7c22f"
+  },
+  "04-ai-agent-accountability": {
+   "result": "PASS",
+   "date": "2026-10-29",
+   "sha256": "2a2635f34c06c67694d3c108520be2c3b9276d0b2c2ad59018d43c78e1c14d73",
+   "srt_sha256": "0e5e83e9a9ef6f34892645e752b34202ae395f54509b8146e854672056e75cbb"
+  },
+  "05-tokeniser-gateway": {
+   "result": "PASS",
+   "date": "2026-10-29",
+   "sha256": "c2afa0ef2496df2b854fad90986760ad07c63ee558e4517fcbe81c106bee46c2",
+   "srt_sha256": "98935251b15818e54018014e48631ed7f71d2d41d1194ae2c84c686504a9afff"
+  },
+  "06-acacia-instant-subscription": {
+   "result": "PASS",
+   "date": "2026-10-29",
+   "sha256": "a344ca641b9eb49e65480db210b65d0b86914581f0b7438631cad336e9f239e6",
+   "srt_sha256": "5f7e546dbea3c9ab2bb0cc3eed52b44bdd49a5b36112f9960c27e448fabcffdb"
+  }
+ }
+}

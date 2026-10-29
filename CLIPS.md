@@ -4,7 +4,7 @@ Six vertical clips cut from the latest official Redbelly Insights episodes ([red
 
 | # | Clip | Source episode | Timestamps | Speaker | Length |
 |---|------|----------------|------------|---------|--------|
-| 1 | [01-audd-sovereignty](clips/01-audd-sovereignty.mp4) | Redbelly Insights - Episode 29 (9 July 2026) | 43:03.3-43:11.5, 43:20.8-43:28.8, 43:39.6-43:49.8, 44:06.6-44:29.1 | Effie Dimitropoulos, CEO, AUDD Digital | 49 s |
+| 1 | [01-audd-sovereignty](clips/01-audd-sovereignty.mp4) | Redbelly Insights - Episode 29 (9 July 2026) | 43:03.3-43:11.5, 43:20.8-43:28.8, 43:40.5-43:49.8, 44:06.6-44:29.1 | Effie Dimitropoulos, CEO, AUDD Digital | 48 s |
 | 2 | [02-tokenised-workflows](clips/02-tokenised-workflows.mp4) | Redbelly Insights - Episode 28 (11 June 2026) | 05:40.2-06:10.2, 06:28.6-06:41.5 | Vincent Gramoli, Founder, Redbelly Network | 43 s |
 | 3 | [03-accountable-consensus](clips/03-accountable-consensus.mp4) | Redbelly Insights - Episode 28 (11 June 2026) | 11:48.7-11:56.2, 12:16.4-12:41.5, 12:42.2-12:57.6, 13:02.2-13:10.5 | Vincent Gramoli, Founder, Redbelly Network | 56 s |
 | 4 | [04-ai-agent-accountability](clips/04-ai-agent-accountability.mp4) | Redbelly Insights - Episode 28 (11 June 2026) | 17:04.8-17:27.1, 17:34.9-17:56.4, 18:09.0-18:24.4 | Vincent Gramoli, Founder, Redbelly Network | 59 s |
@@ -15,18 +15,18 @@ Six vertical clips cut from the latest official Redbelly Insights episodes ([red
 
 - **File:** [`clips/01-audd-sovereignty.mp4`](clips/01-audd-sovereignty.mp4) (subtitles also as [`subtitles/01-audd-sovereignty.srt`](subtitles/01-audd-sovereignty.srt))
 - **Source:** Redbelly Insights - Episode 29, 9 July 2026, [official episode file](https://storage.googleapis.com/redbelly-website.firebasestorage.app/Video/rb_ep_29_final_fde9f2a3d6/rb_ep_29_final_fde9f2a3d6.mp4)
-- **Timestamps:** 43:03.3-43:11.5, 43:20.8-43:28.8, 43:39.6-43:49.8, 44:06.6-44:29.1
+- **Timestamps:** 43:03.3-43:11.5, 43:20.8-43:28.8, 43:40.5-43:49.8, 44:06.6-44:29.1
 - **Speaker:** Effie Dimitropoulos, CEO, AUDD Digital
 - **Topic:** Redbelly technology (Australian-built chain for a sovereign AUD stablecoin)
 - **Suggested post caption:** Every US dollar stablecoin is money that isn't sitting onshore. AUDD's Effie Dimitropoulos on why an Aussie dollar stablecoin chose Australian-built, Australian-operated Redbelly.
 
-> We're on Redbelly for that, for that exact reason. Two, well, two reasons, you know, I, I mean, touched on one of them, which is the sovereignty, right? When you or I don't naturally hold and spend US dollars in our day-to-day lives and in our wallets, et cetera, we generally tend to operate in our Australian dollars, then why, why are we pushed in the digital asset space of, of dealing with US dollars, right? However, it all then boils down to every time you're using a US dollar, that is, and especially US dollar stablecoin, it's money that's not sitting onshore. It's money that's not backing your asset onshore. And so supporting the Australian ecosystem by using a blockchain like Redbelly that is an Australian, an Australian-built and Australian-operated blockchain is pretty important.
+> We're on Redbelly for that, for that exact reason. Two, well, two reasons, you know, I, I mean, touched on one of them, which is the sovereignty, right? When you or I don't naturally hold and spend US dollars in our day-to-day lives and in our wallets, we generally tend to operate in our Australian dollars, then why, why are we pushed in the digital asset space of, of dealing with US dollars, right? However, it all then boils down to every time you're using a US dollar, that is, and especially US dollar stablecoin, it's money that's not sitting onshore. It's money that's not backing your asset onshore. And so supporting the Australian ecosystem by using a blockchain like Redbelly that is an Australian, an Australian-built and Australian-operated blockchain is pretty important.
 
 **What each cut leaves out** (the removed audio transcribed on its own with Whisper large-v3):
 
 - Cut 1 at 00:08.2 in the clip, 43:11.5 to 43:20.8 in the episode (9.3 s): “I have, and many non -US dollar stablecoin issuers feel the same way, and that is this whole idea of sovereignty.”
-- Cut 2 at 00:16.1 in the clip, 43:28.8 to 43:39.6 in the episode (10.8 s): “And even in our transactions, when we're buying a car and a house and paying for our tradesmen and tradespeople and doing our day -to -day activities, our investments.”
-- Cut 3 at 00:26.3 in the clip, 43:49.8 to 44:06.6 in the episode (16.8 s): “And why, because they've been there longer and there is that dominance and there is that comfort and no doubt the digital asset space is priced in US dollars. So that plays quite an important role in that.”
+- Cut 2 at 00:16.1 in the clip, 43:28.8 to 43:40.5 in the episode (11.8 s): “um and even in our transactions when we're buying a car in a house and paying for our tradesmen and uh trades people um and uh doing our you know day -to -day activities our investments etc”
+- Cut 3 at 00:25.3 in the clip, 43:49.8 to 44:06.6 in the episode (16.8 s): “And why, because they've been there longer and there is that dominance and there is that comfort and no doubt the digital asset space is priced in US dollars. So that plays quite an important role in that.”
 
 ## 2. A tokenised invoice is just a PDF. The workflow is the value.
 

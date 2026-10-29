@@ -398,8 +398,9 @@ def write_verification_md(checks, rows, report, review):
                 out += ["| Clip | At | Found | Fix |", "|---|---|---|---|"]
                 out += [f"| {f['clip']} | {f['at']} | {md(f['found'])} | {md(f['fix'])} |" for f in rd["findings"]]
                 out.append("")
-        out += ["Each clip's sign-off is tied to the SHA-256 of the MP4 and SRT that were watched, so any later "
-                "change to a clip voids it until it is watched again.", ""]
+        out += ["Each clip's sign-off is recorded against the SHA-256 of its MP4 and SRT in "
+                "[`verification/human_review.json`](verification/human_review.json), so any later change to a clip "
+                "voids it until it is watched again.", ""]
     out += ["## Review notes on the automated findings", ""]
     out += [review.get("note", ""), ""] if review.get("note") else []
     for r in rows:

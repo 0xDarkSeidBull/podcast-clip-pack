@@ -3,12 +3,12 @@
  "tool": "tools/verify_av.py",
  "clips": {
   "01-audd-sovereignty": {
-   "sha256": "cfa7ea8416fa78ac5c46f9a63d059ee52f4510e1f8e9fa1d14d9949ba3a1e848",
-   "srt_sha256": "ad4bda8ce1c02363f8628db56c8867fa912866375a95a0b040ce60f63bd7b840",
+   "sha256": "d386127d9f4090f1008763dace071029b1c64d1a0587b52c48869c00dcd8b1eb",
+   "srt_sha256": "4d354e4475978a6429d97e49e27d4e77e957e3c24da1cd705adb2769dd90762b",
    "subs": {
-    "match": 0.963,
-    "srt_words": 139,
-    "asr_words": 131,
+    "match": 0.9624,
+    "srt_words": 137,
+    "asr_words": 129,
     "diffs": [
      {
       "t": 2.42,
@@ -29,36 +29,36 @@
       "context": "reasons, you know, I, I mean, touched on one of"
      },
      {
-      "t": 20.64,
+      "t": 19.67,
       "srt": "why",
       "asr": "",
       "context": "Australian dollars, then why, why are we pushed in"
      },
      {
-      "t": 23.39,
+      "t": 22.42,
       "srt": "of,",
       "asr": "",
       "context": "the digital asset space of, of dealing with US"
      },
      {
-      "t": 32.4,
+      "t": 31.44,
       "srt": "",
       "asr": "a",
       "context": "that is, and especially US dollar stablecoin, it's"
      },
      {
-      "t": 44.52,
+      "t": 43.55,
       "srt": "an Australian-built",
       "asr": "",
       "context": "that is an Australian, an Australian-built and Australian-operated blockchain is"
      }
     ],
-    "asr_text": "We're on red belly for that exact reason. Well, two reasons. You know, I touched on one of them, which is the sovereignty, right? When you or I don't naturally hold and spend US dollars in our day -to -day lives and in our wallets, et cetera, we generally tend to operate in our Australian dollars. Then why are we pushed in the digital asset space of dealing with US dollars, right? However, it all then boils down to every time you're using a US dollar, that is, and especially a US dollar stable coin, it's money that's not sitting on shore. It's money that's not backing your asset on shore. And so supporting the Australian ecosystem by using a blockchain like RedBelly that is an Australian built and Australian operated blockchain is pretty important.",
+    "asr_text": "We're on red belly for that exact reason. Well, two reasons. You know, I touched on one of them, which is the sovereignty, right? When you or I don't naturally hold and spend US dollars in our day -to -day lives and in our wallets, we generally tend to operate in our Australian dollars. Then why are we pushed in the digital asset space of dealing with US dollars, right? However, it all then boils down to every time you're using a US dollar, that is, and especially a US dollar stablecoin, it's money that's not sitting on shore. It's money that's not backing your asset on shore. And so supporting the Australian ecosystem by using a blockchain like RedBelly that is an Australian built and Australian operated blockchain is pretty important.",
     "timing_in_cue": 1.0,
     "timing_worst_s": 0.0,
-    "timing_words": 125,
+    "timing_words": 124,
     "timing_off": [],
-    "ctc_text": "we're on redbelly for that tem a for that exact reason two well two reasons you know w iman you touched on one of them which is the sovereignty ro when you or i don't naturally hold am and an spend u s dollars am in our day to day lives and in our wallets ments et cetera we generally tend to operate in our australian dollars then why why we pushed a indedidual asset space of of dealing with u s dollars right however it all then boils down to every time you're using a u s dollar that is especially u s dollars stable coin it's money that's not sitting on shore it's money that's not backing your acid on shore and so supporting the australian ego system by using a block chain like redbelly that is an australian a australian built an australian operated block chain am is pretty important"
+    "ctc_text": "we're on red belly for that tem a for that exact reason two well two reasons you know w i man you touched on one of them which is the sovereignty r when you or i don't naturally hold am and an spend u s dollars am in our day to day lives and in our wallets we generally tend to operate in our australian dollars then why why we pushed a inthedidual asset space of of dealing with us dollars right however it all then boils down to every time you're using a u s dollar that is an especially u es dollar stable coin it's money that's not sitting on shore it's money that's not backing your acid on shore and so supporting the australian ego system by using a block chain like redbelly that is an australian a australian built an australian operated block chain am is pretty important"
    },
    "cue_issues": [],
    "sync": [
@@ -67,35 +67,35 @@
      "from": 2583.32,
      "to": 2591.47,
      "head_ms": 0.1,
-     "head_corr": 1.0,
+     "head_corr": 0.999,
      "tail_ms": 0.0,
      "tail_corr": 0.999
     },
     {
      "seg": 2,
      "from": 2600.82,
-     "to": 2608.81,
+     "to": 2608.78,
      "head_ms": 0.0,
-     "head_corr": 0.998,
-     "tail_ms": 0.0,
-     "tail_corr": 0.999
+     "head_corr": 0.997,
+     "tail_ms": -0.1,
+     "tail_corr": 0.998
     },
     {
      "seg": 3,
-     "from": 2619.59,
+     "from": 2620.53,
      "to": 2629.76,
-     "head_ms": 0.0,
-     "head_corr": 0.994,
-     "tail_ms": -0.1,
-     "tail_corr": 0.995
+     "head_ms": -3.3,
+     "head_corr": 0.992,
+     "tail_ms": -3.4,
+     "tail_corr": 0.994
     },
     {
      "seg": 4,
      "from": 2646.59,
      "to": 2669.12,
-     "head_ms": 0.0,
-     "head_corr": 1.0,
-     "tail_ms": 0.0,
+     "head_ms": -3.3,
+     "head_corr": 0.999,
+     "tail_ms": -3.3,
      "tail_corr": 0.993
     }
    ],
@@ -136,30 +136,30 @@
     {
      "seg": 2,
      "kind": "out",
-     "src": 2608.81,
-     "clip": 16.14,
+     "src": 2608.78,
+     "clip": 16.11,
      "prev": "wallets,",
-     "next": "And",
+     "next": "um",
      "heard": "wallets",
      "expect": "wallets",
-     "level_db": -36.1
+     "level_db": -34.3
     },
     {
      "seg": 3,
      "kind": "in",
-     "src": 2619.59,
-     "clip": 16.14,
-     "prev": "investments.",
-     "next": "et",
-     "heard": "et",
-     "expect": "et",
-     "level_db": -45.6
+     "src": 2620.53,
+     "clip": 16.11,
+     "prev": "etc",
+     "next": "we",
+     "heard": "we",
+     "expect": "we",
+     "level_db": -54.5
     },
     {
      "seg": 3,
      "kind": "out",
      "src": 2629.76,
-     "clip": 26.31,
+     "clip": 25.34,
      "prev": "right?",
      "next": "And",
      "heard": "right",
@@ -170,7 +170,7 @@
      "seg": 4,
      "kind": "in",
      "src": 2646.59,
-     "clip": 26.31,
+     "clip": 25.34,
      "prev": "that.",
      "next": "However,",
      "heard": "however",
@@ -181,7 +181,7 @@
      "seg": 4,
      "kind": "out",
      "src": 2669.12,
-     "clip": 48.84,
+     "clip": 47.87,
      "prev": "important.",
      "next": "I",
      "heard": "important",
@@ -198,14 +198,14 @@
      "removed": "I have, and many non -US dollar stablecoin issuers feel the same way, and that is this whole idea of sovereignty."
     },
     {
-     "clip": 16.14,
-     "from": 2608.81,
-     "to": 2619.59,
-     "removed_s": 10.78,
-     "removed": "And even in our transactions, when we're buying a car and a house and paying for our tradesmen and tradespeople and doing our day -to -day activities, our investments."
+     "clip": 16.11,
+     "from": 2608.78,
+     "to": 2620.53,
+     "removed_s": 11.75,
+     "removed": "um and even in our transactions when we're buying a car in a house and paying for our tradesmen and uh trades people um and uh doing our you know day -to -day activities our investments etc"
     },
     {
-     "clip": 26.31,
+     "clip": 25.34,
      "from": 2629.76,
      "to": 2646.59,
      "removed_s": 16.83,
@@ -213,8 +213,8 @@
     }
    ],
    "visual": {
-    "frames": 98,
-    "static_max_diff": 0.6,
+    "frames": 96,
+    "static_max_diff": 0.76,
     "footer_ocr": "Effie Dimitropoulos CEO, AUDD Digital",
     "header_ocr": "Why an Aussie dollar stablecoin runs on Redbelly",
     "tag_ocr": "INSIGHTS - EPISODE 29",
